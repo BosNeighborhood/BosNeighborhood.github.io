@@ -1,4 +1,5 @@
-﻿/// <reference path="third-party/markerclusterer.js" />
+﻿/// <reference path="util/util.js" />
+/// <reference path="third-party/markerclusterer.js" />
 /// <reference path="third-party/google-map.js" />
 /// <reference path="third-party/d3.js" />
 /// <reference path="third-party/lodash.js" />
@@ -8,52 +9,17 @@ requirejs.config({
     baseUrl: 'third-party',
     paths: {
         shapefile: '../shapefile',
+        util: '../util',
         jquery: 'https://code.jquery.com/jquery-3.1.1.min',
         google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ'
     }
 });
 
-require(['lodash', 'd3', 'jquery', 'shapefile/boston_neighborhoods.js', 'google_map', 'markerclusterer'],
-function (_, d3, $, neighborhoods_shape) {
+require(['lodash', 'd3', 'jquery', 'shapefile/boston_neighborhoods.js', 'util/util', 'google_map', 'markerclusterer'],
+function (_, d3, $, neighborhoods_shape, util) {
     var map;    
 
-    function initMap() {
-        if (!google.maps.Polygon.prototype.getBounds) {
-            google.maps.Polygon.prototype.getBounds = function () {
-                var bounds = new google.maps.LatLngBounds()
-                this.getPath().forEach(function (element, index) { bounds.extend(element) })
-                return bounds
-            }
-        }
-        /**
-        * Returns the zoom level at which the given rectangular region fits in the map view. 
-        * The zoom level is computed for the currently selected map type. 
-        * @param {google.maps.Map} map
-        * @param {google.maps.LatLngBounds} bounds 
-        * @return {Number} zoom level
-        **/
-        // http://stackoverflow.com/questions/9837017/equivalent-of-getboundszoomlevel-in-gmaps-api-3
-        function getZoomByBounds(map, bounds) {
-            var MAX_ZOOM = map.mapTypes.get(map.getMapTypeId()).maxZoom || 21;
-            var MIN_ZOOM = map.mapTypes.get(map.getMapTypeId()).minZoom || 0;
-
-            var ne = map.getProjection().fromLatLngToPoint(bounds.getNorthEast());
-            var sw = map.getProjection().fromLatLngToPoint(bounds.getSouthWest());
-
-            var worldCoordWidth = Math.abs(ne.x - sw.x);
-            var worldCoordHeight = Math.abs(ne.y - sw.y);
-
-            //Fit padding in pixels 
-            var FIT_PAD = 40;
-
-            for (var zoom = MAX_ZOOM; zoom >= MIN_ZOOM; --zoom) {
-                if (worldCoordWidth * (1 << zoom) + 2 * FIT_PAD < $(map.getDiv()).width() &&
-                    worldCoordHeight * (1 << zoom) + 2 * FIT_PAD < $(map.getDiv()).height())
-                    return zoom;
-            }
-            return 0;
-        }
-
+    function initMap() {       
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
             var region_neighborhood_ht = {};
 
@@ -107,7 +73,7 @@ function (_, d3, $, neighborhoods_shape) {
                                     }
                                 });
                                 map.setCenter(this.getBounds().getCenter());
-                                map.setZoom(getZoomByBounds(map, this.getBounds()));
+                                map.setZoom(util.getZoomByBounds(map, this.getBounds()));
                             });
                             google.maps.event.addListener(region, 'mouseover', function (event) {
                                 // Within the event listener, "this" refers to the polygon which
@@ -127,7 +93,7 @@ function (_, d3, $, neighborhoods_shape) {
                     });
                 });
                 // load crime data, create marker cluster
-                requestData((error, response) => {
+                util.requestData((error, response) => {
                     if (error) {
                         console.log(error);
                     }
@@ -142,12 +108,5 @@ function (_, d3, $, neighborhoods_shape) {
             }
         });
     }
-    initMap();
-
-    function requestData(callback) {
-        var baseUrl = "https://data.cityofboston.gov/resource/29yf-ye7n.json";
-        d3.request(baseUrl)
-            .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
-            .get(callback);
-    }
+    initMap();    
 });
