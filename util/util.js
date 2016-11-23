@@ -42,8 +42,37 @@
             .get(callback);
     }
 
+    function addEventListeners(polygon, map, region_neighborhood_ht) {
+        google.maps.event.addListener(polygon, 'click', function (event) {
+            _.forOwn(region_neighborhood_ht, (value, key) => {
+                if (value.indexOf(this) !== -1) {
+                    // todo: update sidebar etc.
+                    // key is the name of the neighborhood
+                    //alert(key);
+                }
+            });
+            map.setCenter(this.getBounds().getCenter());
+            map.setZoom(getZoomByBounds(map, this.getBounds()));
+        });
+        google.maps.event.addListener(polygon, 'mouseover', function (event) {
+            // Within the event listener, "this" refers to the polygon which
+            // received the event.
+            this.setOptions({
+                strokeColor: '#00ff00',
+                fillColor: '#00ff00'
+            });
+        });
+        google.maps.event.addListener(polygon, 'mouseout', function (event) {
+            this.setOptions({
+                strokeColor: '#ff0000',
+                fillColor: '#ff0000'
+            });
+        });
+    }
+
     return {
         getZoomByBounds: getZoomByBounds,
-        requestData: requestData
+        requestData: requestData,
+        addEventListeners: addEventListeners
     };
 });

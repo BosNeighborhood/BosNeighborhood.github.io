@@ -5,7 +5,7 @@
 /// <reference path="third-party/lodash.js" />
 /// <reference path="third-party/require.js" />
 
-requirejs.config({
+require.config({
     baseUrl: 'third-party',
     paths: {
         shapefile: '../shapefile',
@@ -17,9 +17,9 @@ requirejs.config({
 
 require(['lodash', 'd3', 'jquery', 'shapefile/boston_neighborhoods.js', 'util/util', 'google_map', 'markerclusterer'],
 function (_, d3, $, neighborhoods_shape, util) {
-    var map;    
+    var map;
 
-    function initMap() {       
+    function initMap() {
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
             var region_neighborhood_ht = {};
 
@@ -44,7 +44,7 @@ function (_, d3, $, neighborhoods_shape, util) {
                     var nw = new google.maps.LatLng(ne.lat(), sw.lng());
                     var se = new google.maps.LatLng(sw.lat(), ne.lng());
                 });
-                // load neighborhood borders, register to events            
+                // load neighborhood borders as polygons
                 _.forEach(neighborhoods_shape.features, neighborhood => {
                     if (neighborhood.geometry.type === "Polygon") {
                         neighborhood.geometry.coordinates = [neighborhood.geometry.coordinates];
@@ -64,33 +64,13 @@ function (_, d3, $, neighborhoods_shape, util) {
                             if (!_.has(region_neighborhood_ht, neighborhood.properties.Name)) {
                                 region_neighborhood_ht[neighborhood.properties.Name] = [];
                             }
-                            region_neighborhood_ht[neighborhood.properties.Name].push(region);
-                            google.maps.event.addListener(region, 'click', function (event) {
-                                _.forOwn(region_neighborhood_ht, (value, key) => {
-                                    if (value.indexOf(this) !== -1) {
-                                        // todo: update sidebar etc.
-                                        //alert(key);
-                                    }
-                                });
-                                map.setCenter(this.getBounds().getCenter());
-                                map.setZoom(util.getZoomByBounds(map, this.getBounds()));
-                            });
-                            google.maps.event.addListener(region, 'mouseover', function (event) {
-                                // Within the event listener, "this" refers to the polygon which
-                                // received the event.
-                                this.setOptions({
-                                    strokeColor: '#00ff00',
-                                    fillColor: '#00ff00'
-                                });
-                            });
-                            google.maps.event.addListener(region, 'mouseout', function (event) {
-                                this.setOptions({
-                                    strokeColor: '#ff0000',
-                                    fillColor: '#ff0000'
-                                });
-                            });
+                            region_neighborhood_ht[neighborhood.properties.Name].push(region);                            
                         });
                     });
+                });
+
+                _.forOwn(region_neighborhood_ht, (value, key) => {
+                    _.forEach(value, region => util.addEventListeners(region, map, region_neighborhood_ht));
                 });
                 // load crime data, create marker cluster
                 util.requestData((error, response) => {
@@ -108,5 +88,5 @@ function (_, d3, $, neighborhoods_shape, util) {
             }
         });
     }
-    initMap();    
+    initMap();
 });
