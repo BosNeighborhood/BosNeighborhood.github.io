@@ -9,3 +9,13 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+.filter-top {
+    position: absolute;
+    top: 20px;
+    z-index: 100;
+}
+
+select[id$='type-filter'] {
+    width: 300px;
+}

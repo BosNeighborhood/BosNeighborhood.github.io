@@ -3,10 +3,19 @@
 <head>
     <title>Under the Skin of the City</title>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />    
+    <link rel="stylesheet" href="style.css" />   
+    <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />     
 </head>
-<body>
-    <div id="map"></div>    
+<body ng-controller="BosNeighborhoodController">
+    <div class="filter-top">
+        <span><select chosen multiple id="crime-type-filter"
+                    ng-model="type_filters.selected_crime_types"
+                    ng-options="type for type in crime_types"></select></span>
+        <span><select chosen multiple id="service-type-filter"
+                    ng-model="type_filters.selected_service_types"
+                    ng-options="type for type in service_types"></select></span>     
+    </div>    
+    <div id="map"></div>        
     <script data-main="script.js" src="third-party/require.js"></script>
 </body>
 </html>
