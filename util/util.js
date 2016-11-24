@@ -1,4 +1,4 @@
-﻿define(['d3', 'google_map'], function (d3) {
+﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map'], function (_, d3, UrlBuilder) {
     if (!google.maps.Polygon.prototype.getBounds) {
         google.maps.Polygon.prototype.getBounds = function () {
             var bounds = new google.maps.LatLngBounds()
@@ -35,9 +35,20 @@
         return 0;
     }
 
-    function requestData(callback) {
-        var baseUrl = "https://data.cityofboston.gov/resource/29yf-ye7n.json";
-        d3.request(baseUrl)
+    function requestData(datasetType, filters, callback) {
+        if (filters.length === 0) {
+            // no filter selected, return nothing
+            callback(null, { response: JSON.stringify([]) });
+            return;
+        }
+        // todo: allow unlimited # of records?
+        var urlBuilder = new UrlBuilder(datasetType).limit(100000);
+        // 'All' will always come first in the list if selected
+        // no need to add filters if 'All' is in list
+        if (filters[0] !== 'All') {
+            urlBuilder.addFilter(datasetType, filters);
+        }        
+        d3.request(urlBuilder.url)
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
             .get(callback);
     }
