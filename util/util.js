@@ -78,7 +78,7 @@
                 strokeColor: '#ff0000',
                 fillColor: '#ff0000'
             });
-        });
+        });        
     }
 
     return {

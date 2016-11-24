@@ -17,6 +17,7 @@ html, body, .container {
     position: absolute;
     top: 20px;
     z-index: 1;
+    visibility: hidden;
 }
 
 select[id$='type-filter'] {

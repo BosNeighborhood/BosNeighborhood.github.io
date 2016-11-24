@@ -11,8 +11,11 @@
                 $scope.map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: bos_lat, lng: bos_lng },
                     zoom: 10
-                });
+                });                
                 var map = $scope.map;
+                google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
+                    $(".filter-top").css("visibility", "initial").hide().fadeIn(600);
+                });
                 map.fitBounds(results[0].geometry.bounds);
                 // triger event on every change of viewport
                 // todo: efficiency

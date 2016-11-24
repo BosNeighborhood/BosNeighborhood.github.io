@@ -77,7 +77,7 @@ function ($, angular, util) {
                     //console.log($scope.type_filters.selected_service_types);
                     util.render($scope, '311');
                 });
-            });
+            });        
 
         util.initMap($scope);
     });
