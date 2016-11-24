@@ -41,5 +41,7 @@
             this.url += ')';
             return this;
         }
+
+        // todo: addFilter(column, min, max) to filter on min < col val < max
     }
 });

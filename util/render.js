@@ -28,6 +28,7 @@ define(['lodash', 'util/util', 'google_map'], function (_, util) {
             console.log("good records: " + num_good_record);
 
             // create marker cluster
+            // todo: only create marker if record is "good"
             $scope.markers = _(data).map(record => new google.maps.Marker({
                 position: { lat: +record.lat, lng: +record.long },
                 // todo: actual label
