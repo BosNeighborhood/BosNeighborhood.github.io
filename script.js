@@ -24,10 +24,15 @@ require.config({
     }
 });
 
-require(['jquery', 'angular', 'util/module', 'google_map', 'chosen/angular-chosen.min'],
-function ($, angular, util) {
+require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
+function ($, angular, util) {    
     var app = angular.module("BosNeighborhood", ['localytics.directives']);
     app.controller("BosNeighborhoodController", function ($scope, $timeout) {
+        $scope.school_list = [];
+        $scope.school = { selected: null };
+        $scope.school_marker = null;
+        $scope.closeModal = () => Avgrund.hide();
+        $scope.map = null;
         $scope.markers = [];
         $scope.markerCluster = null;
         $scope.region_neighborhood_ht = {};
@@ -36,24 +41,45 @@ function ($, angular, util) {
         $scope.service_types = ['All'];
         $scope.type_filters = { selected_crime_types: ['All'], selected_service_types: ['All'] };
 
+        $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
+        $("#school-select").chosen({ placeholder_text_single: '' })
+            .change(() => {
+                $timeout(() => {
+                    $scope.closeModal();
+                    new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + " Boston" }, (results, status) => {
+                        // todo: do something if status is not OK
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var school_lat = +results[0].geometry.location.lat(),
+                                school_lng = +results[0].geometry.location.lng();
+                            $scope.school_marker = new google.maps.Marker({
+                                position: { lat: school_lat, lng: school_lng },
+                                label: $scope.school.selected,
+                                map: $scope.map
+                            });
+                        }
+                    });
+                });
+            });        
+        Avgrund.show("#school-selector");        
+
         $("#crime-type-filter").chosen({ placeholder_text_multiple: 'Select crime types' })
             .change(() => {
                 // make sure callback runs in next digest cycle
                 // http://stackoverflow.com/questions/29506103/directive-updates-to-parent-scope-one-step-delayed
                 $timeout(() => {
-                    console.log($scope.type_filters.selected_crime_types);
+                    //console.log($scope.type_filters.selected_crime_types);
                     util.render($scope, 'crime');
                 });
             });
         $("#service-type-filter").chosen({ placeholder_text_multiple: 'Select 311 types' })
             .change(() => {
                 $timeout(() => {
-                    console.log($scope.type_filters.selected_service_types);
+                    //console.log($scope.type_filters.selected_service_types);
                     util.render($scope, '311');
                 });
             });
 
-        var map = util.initMap($scope);
+        util.initMap($scope);
     });
     angular.bootstrap(document, ['BosNeighborhood']);
 });

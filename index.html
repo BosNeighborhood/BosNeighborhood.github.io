@@ -3,19 +3,38 @@
 <head>
     <title>Under the Skin of the City</title>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />   
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>    
     <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />     
+    <link rel="stylesheet" href="third-party/avgrund/avgrund.css" />
+    <link rel="stylesheet" href="style.css" />   
 </head>
 <body ng-controller="BosNeighborhoodController">
-    <div class="filter-top">
-        <span><select chosen multiple id="crime-type-filter"
-                    ng-model="type_filters.selected_crime_types"
-                    ng-options="type for type in crime_types"></select></span>
-        <span><select chosen multiple id="service-type-filter"
-                    ng-model="type_filters.selected_service_types"
-                    ng-options="type for type in service_types"></select></span>     
+    <div class="container">
+        <div class="filter-top">
+            <span>
+                <select chosen multiple id="crime-type-filter"
+                        ng-model="type_filters.selected_crime_types"
+                        ng-options="type for type in crime_types"></select>
+            </span>
+            <span>
+                <select chosen multiple id="service-type-filter"
+                        ng-model="type_filters.selected_service_types"
+                        ng-options="type for type in service_types"></select>
+            </span>
+        </div>
+        <div id="map"></div>   
     </div>    
-    <div id="map"></div>        
+    <aside id="school-selector" class="avgrund-popup">
+        <h2>Locate your school to begin</h2>        
+        <br />
+        <div>
+            <!--todo: autofocus-->
+            <select chosen id="school-select"
+                    ng-model="school.selected"
+                    ng-options="school for school in school_list"></select>
+        </div>
+        <a href="#" ng-click="closeModal()">Skip</a>
+    </aside>         
     <script src="third-party/jquery-3.1.1.min.js"></script>
     <script data-main="script.js" src="third-party/require.js"></script>
 </body>

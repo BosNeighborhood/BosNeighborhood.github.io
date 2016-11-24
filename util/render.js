@@ -34,7 +34,7 @@ define(['lodash', 'util/util', 'google_map'], function (_, util) {
                 // todo: actual label
                 label: "TBD"
             })).value();            
-            $scope.markerCluster = new MarkerClusterer(map, $scope.markers, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+            $scope.markerCluster = new MarkerClusterer($scope.map, $scope.markers, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
             // load filter options if needed
             if ($scope.crime_types.length === 1) {
                 _(data).map(record => record.offense_code_group).uniq()

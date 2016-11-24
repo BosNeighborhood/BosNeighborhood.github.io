@@ -1,5 +1,5 @@
-﻿define(['jquery', 'lodash', 'util/util', 'util/render', 'shapefile/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, util, render, neighborhoods_shape) {
-    function initMap($scope) {
+﻿define(['jquery', 'lodash', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, util, render, neighborhoods_shape) {
+    function initMap($scope) {        
         var region_neighborhood_ht = $scope.region_neighborhood_ht;
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
             // todo: retry if status is not OK
@@ -8,10 +8,11 @@
                     bos_lng = results[0].geometry.location.lng();
 
                 // todo: hide unneccesary things on map (highways, map/satelite etc)            
-                map = new google.maps.Map(document.getElementById('map'), {
+                $scope.map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: bos_lat, lng: bos_lng },
                     zoom: 10
                 });
+                var map = $scope.map;
                 map.fitBounds(results[0].geometry.bounds);
                 // triger event on every change of viewport
                 // todo: efficiency
@@ -56,9 +57,7 @@
                 // todo: separate marker / cluster for crime / 311
                 //util.render($scope, "311");
             }
-        });
-
-        return map;
+        });        
     }
 
     return {
