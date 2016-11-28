@@ -98,15 +98,7 @@ a {
         color: #91cd85;
     }
 
-small {
-    display: block;
-    margin-top: 15px;
-    padding-top: 15px;
-    color: #333;
-    font-size: 0.85em;
-    border-top: 1px dashed #ccc;
-    -webkit-text-size-adjust: none;
-}
+
 
 button {
     border: 0px;
