@@ -57,8 +57,7 @@
                 });
                 
                 render.render($scope, "crime");
-                // todo: separate marker / cluster for crime / 311
-                //util.render($scope, "311");
+                render.render($scope, "311");
             }
         });        
     }

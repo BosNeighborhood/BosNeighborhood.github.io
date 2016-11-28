@@ -33,8 +33,8 @@ function ($, angular, util) {
         $scope.school_marker = null;
         $scope.closeModal = () => Avgrund.hide();
         $scope.map = null;
-        $scope.markers = [];
-        $scope.markerCluster = null;
+        $scope.markers = {};
+        $scope.markerCluster = {};
         $scope.infoWindow = new google.maps.InfoWindow;
         $scope.region_neighborhood_ht = {};
         // todo: show some stats along with the types "Theft (**19 cases**)"
