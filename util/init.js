@@ -17,9 +17,9 @@
                     $(".filter-top").css("visibility", "initial").hide().fadeIn(600);
                 });
                 map.fitBounds(results[0].geometry.bounds);
-                // triger event on every change of viewport
-                // todo: efficiency
+                // trigered on every change of viewport
                 // todo: limit zoom/pan level/area cannot move outside bos
+                // this is not currently used
                 google.maps.event.addListener(map, 'idle', () => {
                     var bounds = map.getBounds();
                     var ne = bounds.getNorthEast(); // LatLng of the north-east corner
