@@ -1,31 +1,168 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Under the Skin of the City</title>
-	<meta charset="utf-8" />
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>    
-    <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />     
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />
     <link rel="stylesheet" href="third-party/avgrund/avgrund.css" />
-    <link rel="stylesheet" href="style.css" />   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body ng-controller="BosNeighborhoodController">
-    <div class="container">
-        <div class="filter-top">
-            <span>
-                <select chosen multiple id="crime-type-filter"
-                        ng-model="type_filters.selected_crime_types"
-                        ng-options="type for type in crime_types"></select>
-            </span>
-            <span>
-                <select chosen multiple id="service-type-filter"
-                        ng-model="type_filters.selected_service_types"
-                        ng-options="type for type in service_types"></select>
-            </span>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid" id="top-header">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"> Under the Skin of the City <small> An online tool to help students pick the right neghborhood to live</small> </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span> About us</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-share"></span> Share</a></li>
+            </ul>
         </div>
-        <div id="map"></div>   
-    </div>    
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8" id="map"></div>
+            <div class="col-md-4 navigation">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a data-toggle="tab" href="#home">Introduction</a></li>
+                    <li><a data-toggle="tab" href="#neighborhoods">Neighborhoods</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <div data-spy="scroll" data-target=".tab-content" data-offset="50">
+                            <div id="section1" class="container-fluid">
+                                <h1>Introduction</h1>
+                                <p>Welcome to the online neighborhood guide. Our online tool helps you to explore and find the right neighborhood in terms of safety and city services.</p>
+                            </div>
+                            <div id="section2" class="container-fluid">
+                                <h1>Boston Crime</h1>
+                                <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                                <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+                            </div>
+                            <div id="section3" class="container-fluid">
+                                <h1>Boston 311</h1>
+                                <p>
+                                    311 is an easy-to-remember telephone number that connects you with highly-trained
+                                    Constituent Service Center representatives who are ready to help you with requests for
+                                    non-emergency City services and information.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="neighborhoods" class="tab-pane fade">
+                        <div class="row">
+                            <h2 class="col-sm-3 col-md-3" style="padding: 0px 0px 0px 15px;">Back Bay</h2>
+                            <div class="col-sm-9 col-md-9">
+                                <form class="navbar-form navbar-right" role="search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="desc">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                                Home to
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse in">
+                                        <div class="panel-body">Boston Public Library, Newbury Street, Prudential Center, Boston Public Garden</div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                                Neighbors
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <div class="panel-body">Mostly professionals and some students</div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                                                Proximity to Campus
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse3" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            1 mile
+                                            T Access: Green line (B,C, D & E lines), orange line, many buses.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                                                Commute to Campus
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse4" class="panel-collapse collapse">
+                                        <div class="panel-body">15-20 minute walk or a 10 minute subway ride.</div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                                                Description
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse5" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            Once water behind the Public Garden, the Back Bay now holds some of
+                                            the most exclusive real estate in Boston, diverse and trendy shopping on Newbury Street,
+                                            and elegant historic brownstone architecture. Back Bay is an exciting place to live that does
+                                            come with higher rents!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-top">
+        <span>
+            <select chosen multiple id="crime-type-filter"
+                    ng-model="type_filters.selected_crime_types"
+                    ng-options="type for type in crime_types"></select>
+        </span>
+        <span>
+            <select chosen multiple id="service-type-filter"
+                    ng-model="type_filters.selected_service_types"
+                    ng-options="type for type in service_types"></select>
+        </span>
+    </div>        
     <aside id="school-selector" class="avgrund-popup">
-        <h2>Locate your school to begin</h2>        
+        <h2>Locate your school to begin</h2>
         <br />
         <div>
             <!--todo: autofocus-->
@@ -34,7 +171,7 @@
                     ng-options="school for school in school_list"></select>
         </div>
         <a href="#" ng-click="closeModal()">Skip</a>
-    </aside>         
+    </aside>
     <script src="third-party/jquery-3.1.1.min.js"></script>
     <script data-main="script.js" src="third-party/require.js"></script>
 </body>
