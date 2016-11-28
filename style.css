@@ -3,23 +3,9 @@
 #map {
     height: 100%;
 }
-/* Optional: Makes the sample page fill the window. */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
 
-body {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    background-color: #fff;
-}
-
-#top-header{   
-	position: relative;
+#top-header {
+    position: relative;
     padding: 15px 15px 0px 15px;
     color: #ececf9;
     text-align: center;
@@ -30,60 +16,122 @@ body {
     background-image: -o-linear-gradient(top,#563d7c 0,#333399 100%);
     background-image: linear-gradient(to bottom,#563d7c 0,#333399 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#563d7c', endColorstr='#333399', GradientType=0);
-	background-repeat: repeat-x;}
-
-#content {
-	padding: 25px;
-}	
-
-.map{
-	outline: 1px solid  #e6e6ff;
-	min-height: 500px;
+    background-repeat: repeat-x;
 }
-.navigation {
-	outline: 1px solid  #e6e6ff;
-	min-height: 500px;
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', Helvetica, sans-serif;
+    font-size: 16px;
+    color: #222;
+}
+
+.navigation {
+    outline: 1px solid #e6e6ff;
+    min-height: 500px;
 }
 
 .no-margin {
-		margin: 4px !important;
-	
-}
-a.navbar-brand {
-  color: #ffffff;
-  font-size: 1.500em;
-  text-transform: uppercase;
-  height: 70px;
-  font-family: 'jaapokki_enchanceregular';
+    margin: 4px !important;
 }
 
-a.navbar-brand small {
-  display: block;
-  font-size: 0.650em;
-  font-family: 'Century Gothic';
-  text-transform: capitalize;
+a.navbar-brand {
+    color: #ffffff;
+    font-size: 1.500em;
+    text-transform: uppercase;
+    height: 70px;
+    font-family: 'jaapokki_enchanceregular';
 }
+
+    a.navbar-brand small {
+        display: block;
+        font-size: 0.650em;
+        font-family: 'Century Gothic';
+        text-transform: capitalize;
+    }
 
 .navbar-form {
-	width: 100%;
+    width: 100%;
 }
 
-
-h1{
-font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size: 24px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 500;
-	line-height: 26.4px;
+.filter-top {
+    position: absolute;
+    top: 20px;
+    z-index: 1;
+    visibility: hidden;
 }
 
-h2{
-font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-	font-size: 20px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
+select[id$='type-filter'] {
+    width: 300px;
 }
 
+select[id='school-select'] {
+    width: 300px;
+}
+
+h1,
+h2 {
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 10px 0 10px 0;
+    font-size: 16px;
+    line-height: 1.32;
+}
+
+a {
+    color: #7aa76d;
+    text-decoration: none;
+    -webkit-transition: 0.15s color ease;
+    -moz-transition: 0.15s color ease;
+    -ms-transition: 0.15s color ease;
+    -o-transition: 0.15s color ease;
+    transition: 0.15s color ease;
+}
+
+    a:hover {
+        color: #91cd85;
+    }
+
+small {
+    display: block;
+    margin-top: 15px;
+    padding-top: 15px;
+    color: #333;
+    font-size: 0.85em;
+    border-top: 1px dashed #ccc;
+    -webkit-text-size-adjust: none;
+}
+
+button {
+    border: 0px;
+    padding: 8px 10px;
+    margin: 5px 0px;
+    border-radius: 1px;
+    cursor: pointer;
+    color: #fff;
+    background: #7aa76d;
+    font-size: 15px;
+    -webkit-transition: 0.15s background ease;
+    -moz-transition: 0.15s background ease;
+    -ms-transition: 0.15s background ease;
+    -o-transition: 0.15s background ease;
+    transition: 0.15s background ease;
+}
+
+    button:hover {
+        background: #91cd85;
+    }
+
+    button:active {
+        background: #60895a;
+    }
+
+    button + button {
+        margin-left: 5px;
+    }

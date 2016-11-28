@@ -1,50 +1,86 @@
-﻿/// <reference path="third-party/markerclusterer.js" />
+﻿/// <reference path="util/util.js" />
+/// <reference path="third-party/markerclusterer.js" />
 /// <reference path="third-party/google-map.js" />
 /// <reference path="third-party/d3.js" />
 /// <reference path="third-party/lodash.js" />
+/// <reference path="third-party/require.js" />
 
-var map;
-function initMap() {
-    new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var bos_lat = results[0].geometry.location.lat(),
-                bos_lng = results[0].geometry.location.lng();
-
-            // todo: hide unneccesary things on map (highways etc)
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: bos_lat, lng: bos_lng },
-                zoom: 10
-            });
-            map.fitBounds(results[0].geometry.bounds);
-            // triger event on every change of viewport
-            // todo: efficiency
-            // todo: limit zoom/pan level/area cannot move outside bos
-            google.maps.event.addListener(map, 'idle', () => {
-                var bounds = map.getBounds();
-                var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-                var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-                var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-                var se = new google.maps.LatLng(sw.lat(), ne.lng());
-            });
-            
-            requestData((error, response) => {
-                if (error) {
-                    console.log(error);
-                }
-                var data = JSON.parse(response.response);
-                var markers = _(data).map(record => new google.maps.Marker({
-                    position: { lat: +record.lat, lng: +record.long },
-                    label: "TBD"
-                })).value();
-                var markerCluster = new MarkerClusterer(map, markers, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-            });
+require.config({
+    baseUrl: 'third-party',
+    paths: {
+        shapefile: '../shapefile',
+        util: '../util',
+        google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ',
+        angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min',
+        jquery: 'jquery-3.1.1.min'
+    },
+    shim: {
+        angular: {
+            exports: 'angular'
+        },        
+        'chosen/angular-chosen.min': {
+            deps: ['jquery', 'angular', 'chosen/chosen.jquery']
         }
-    });    
-}
+    }
+});
 
-function requestData(callback) {
-    var baseUrl = "https://data.cityofboston.gov/resource/29yf-ye7n.json";
-    d3.request(baseUrl)
-        .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
-        .get(callback);
-}
+require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
+function ($, angular, util) {    
+    var app = angular.module("BosNeighborhood", ['localytics.directives']);
+    app.controller("BosNeighborhoodController", function ($scope, $timeout) {
+        $scope.school_list = [];
+        $scope.school = { selected: null };
+        $scope.school_marker = null;
+        $scope.closeModal = () => Avgrund.hide();
+        $scope.map = null;
+        $scope.markers = {};
+        $scope.markerCluster = {};
+        $scope.infoWindow = new google.maps.InfoWindow;
+        $scope.region_neighborhood_ht = {};
+        // todo: show some stats along with the types "Theft (**19 cases**)"
+        $scope.crime_types = ['All'];
+        $scope.service_types = ['All'];
+        $scope.type_filters = { selected_crime_types: ['All'], selected_service_types: ['All'] };
+
+        $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
+        $("#school-select").chosen({ placeholder_text_single: '' })
+            .change(() => {
+                $timeout(() => {
+                    $scope.closeModal();
+                    new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + " Boston" }, (results, status) => {
+                        // todo: do something if status is not OK
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var school_lat = +results[0].geometry.location.lat(),
+                                school_lng = +results[0].geometry.location.lng();
+                            $scope.school_marker = new google.maps.Marker({
+                                position: { lat: school_lat, lng: school_lng },
+                                label: $scope.school.selected,
+                                map: $scope.map
+                            });
+                        }
+                    });
+                });
+            });        
+        Avgrund.show("#school-selector");        
+
+        $("#crime-type-filter").chosen({ placeholder_text_multiple: 'Select crime types' })
+            .change(() => {
+                // make sure callback runs in next digest cycle
+                // http://stackoverflow.com/questions/29506103/directive-updates-to-parent-scope-one-step-delayed
+                $timeout(() => {
+                    //console.log($scope.type_filters.selected_crime_types);
+                    util.render($scope, 'crime');
+                });
+            });
+        $("#service-type-filter").chosen({ placeholder_text_multiple: 'Select 311 types' })
+            .change(() => {
+                $timeout(() => {
+                    //console.log($scope.type_filters.selected_service_types);
+                    util.render($scope, '311');
+                });
+            });        
+
+        util.initMap($scope);
+    });
+    angular.bootstrap(document, ['BosNeighborhood']);
+});
