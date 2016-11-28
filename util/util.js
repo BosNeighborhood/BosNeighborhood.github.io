@@ -42,7 +42,7 @@
             return;
         }
         // todo: allow unlimited # of records?
-        var urlBuilder = new UrlBuilder(datasetType).limit(100000);
+        var urlBuilder = new UrlBuilder(datasetType).limit(1000);
         // 'All' will always come first in the list if selected
         // no need to add filters if 'All' is in list
         if (filters[0] !== 'All') {
