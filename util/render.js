@@ -1,6 +1,6 @@
 ﻿/// <reference path="../third-party/lodash.js" />
 
-define(['lodash', 'util/util', 'google_map'], function (_, util) {
+define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
     // datasetType: 'crime' or '311'
     function render($scope, datasetType) {
         // remove old data
@@ -28,12 +28,28 @@ define(['lodash', 'util/util', 'google_map'], function (_, util) {
             console.log("good records: " + num_good_record);
 
             // create marker cluster
-            // todo: only create marker if record is "good"
-            $scope.markers = _(data).map(record => new google.maps.Marker({
-                position: { lat: +record.lat, lng: +record.long },
-                // todo: actual label
-                label: "TBD"
-            })).value();            
+            $scope.markers = _(data)
+                .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
+                .map(record => new google.maps.Marker({
+                    position: { lat: +record.lat, lng: +record.long },
+                    record: record
+                })).value();
+            _.forEach($scope.markers, marker => {
+                google.maps.event.addListener(marker, 'click', function (event) {
+                    // Within the event listener, "this" refers to the polygon which
+                    // received the event.   
+                    var formatTime = d3.timeFormat("%a %B %d, %Y %-I%p");
+                    var r = this.record;
+                    var content = `<b>${r.offense_code_group}</b><br />                        
+                        ${r.offense_description}<br />
+                        <br />
+                        ${r.street}<br />
+                        ${formatTime(new Date(r.occurred_on_date))}<br />`;
+                    $scope.infoWindow.setContent(content);
+                    $scope.infoWindow.setPosition(event.latLng);
+                    $scope.infoWindow.open($scope.map);
+                });                
+            });
             $scope.markerCluster = new MarkerClusterer($scope.map, $scope.markers, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
             // load filter options if needed
             if ($scope.crime_types.length === 1) {

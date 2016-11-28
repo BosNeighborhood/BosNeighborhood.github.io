@@ -35,6 +35,7 @@ function ($, angular, util) {
         $scope.map = null;
         $scope.markers = [];
         $scope.markerCluster = null;
+        $scope.infoWindow = new google.maps.InfoWindow;
         $scope.region_neighborhood_ht = {};
         // todo: show some stats along with the types "Theft (**19 cases**)"
         $scope.crime_types = ['All'];
