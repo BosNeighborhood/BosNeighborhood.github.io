@@ -24,6 +24,18 @@
     </nav>
 
     <div class="container-fluid">
+        <div class="filter-top">
+            <span>
+                <select chosen multiple id="crime-type-filter"
+                        ng-model="type_filters.selected_crime_types"
+                        ng-options="type for type in crime_types"></select>
+            </span>
+            <span>
+                <select chosen multiple id="service-type-filter"
+                        ng-model="type_filters.selected_service_types"
+                        ng-options="type for type in service_types"></select>
+            </span>
+        </div>        
         <div class="row">
             <div class="col-md-8" id="map"></div>
             <div class="col-md-4 navigation">
@@ -147,20 +159,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="filter-top">
-        <span>
-            <select chosen multiple id="crime-type-filter"
-                    ng-model="type_filters.selected_crime_types"
-                    ng-options="type for type in crime_types"></select>
-        </span>
-        <span>
-            <select chosen multiple id="service-type-filter"
-                    ng-model="type_filters.selected_service_types"
-                    ng-options="type for type in service_types"></select>
-        </span>
-    </div>        
+        </div>        
+    </div>    
     <aside id="school-selector" class="avgrund-popup">
         <h2>Locate your school to begin</h2>
         <br />

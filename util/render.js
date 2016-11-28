@@ -5,7 +5,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
     function render($scope, datasetType) {
         // remove old data
         // todo: support type
-        deleteMarkers($scope);        
+        deleteMarkers($scope);
         _.forOwn($scope.markerCluster, cluster => cluster.clearMarkers());
 
         // load new data
@@ -46,7 +46,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     // received the event.   
                     var formatTime = d3.timeFormat("%a %B %d, %Y %-I%p");
                     var r = this.record;
-                    var content = `<b>${r.offense_code_group}</b><br />                        
+                    var content = `<b>${r.offense_code_group}</b><br />
                         ${r.offense_description}<br />
                         <br />
                         ${r.street}<br />
@@ -54,31 +54,40 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     $scope.infoWindow.setContent(content);
                     $scope.infoWindow.setPosition(event.latLng);
                     $scope.infoWindow.open($scope.map);
-                });                
+                });
             });
             $scope.markerCluster.datasetType = new MarkerClusterer($scope.map, $scope.markers.datasetType, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
             // load filter options if needed
             // todo: move into one util function
-            if (datasetType === 'crime' && $scope.crime_types.length === 1) {
-                _(data).map(record => record.offense_code_group).uniq()
-                        .forEach(type => $scope.crime_types.push(type));
-                var filterId = "#crime-type-filter";
-                $(filterId).trigger("chosen:updated");
-            }
-            if (datasetType === '311' && $scope.service_types.length === 1) {
-                _(data).map(record => record.subject).uniq()
-                        .forEach(type => $scope.service_types.push(type));
-                var filterId = "#service-type-filter";
-                $(filterId).trigger("chosen:updated");
-            }
+            initFilterOptions($scope, datasetType, data);
         });
     }
 
     function deleteMarkers($scope) {
         _.forOwn($scope.markers, markers => {
             _.forEach(markers, marker => marker.setMap(null));
-        });        
+        });
         $scope.markers = {};
+    }
+
+    function initFilterOptions($scope, datasetType, data) {
+        var types, field;
+        if (datasetType === 'crime') {
+            types = $scope.crime_types;
+            field = 'offense_code_group';
+        }
+        else {
+            // 311
+            types = $scope.service_types;
+            field = 'subject';
+        }
+        if (types.length === 1) {
+            _(data).map(record => record[field]).uniq()
+                    .forEach(type => types.push(type));
+            var filterId = datasetType === 'crime' ? "#crime-type-filter"
+                                                   : "#service-type-filter";
+            $(filterId).trigger("chosen:updated");
+        }
     }
 
     return {
