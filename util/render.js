@@ -4,9 +4,9 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
     // datasetType: 'crime' or '311'
     function render($scope, datasetType) {
         // remove old data
-        // todo: support type
-        deleteMarkers($scope);
-        _.forOwn($scope.markerCluster, cluster => cluster.clearMarkers());
+        deleteMarkers($scope, datasetType);
+        if ($scope.markerCluster[datasetType])
+            $scope.markerCluster[datasetType].clearMarkers();
 
         // load new data
         var filters = datasetType === "crime" ? $scope.type_filters.selected_crime_types
@@ -36,13 +36,13 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             console.log("good records: " + num_good_record);
 
             // create marker cluster
-            $scope.markers.datasetType = _(data)
+            $scope.markers[datasetType] = _(data)
                 .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
                 .map(record => new google.maps.Marker({
                     position: { lat: +record.lat, lng: +record.long },
                     record: record
                 })).value();
-            _.forEach($scope.markers.datasetType, marker => {
+            _.forEach($scope.markers[datasetType], marker => {
                 google.maps.event.addListener(marker, 'click', function (event) {
                     // Within the event listener, "this" refers to the polygon which
                     // received the event.   
@@ -58,7 +58,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     $scope.infoWindow.open($scope.map);
                 });
             });
-            $scope.markerCluster.datasetType = new MarkerClusterer($scope.map, $scope.markers.datasetType, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+            $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
             initTypeFilterOptions($scope, datasetType, data);
             renderDateTimeFilter($scope);
         });
@@ -124,14 +124,47 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             .attr("x", d => timeScaleX(+d.key))
             .attr("y", d => timeScaleY(d.value / max_val * 100))
             .attr("width", d => (timeScaleX(+d.key + 1) - timeScaleX(+d.key)) * 0.95)
-            .attr("height", d => height - margin - timeScaleY(d.value / max_val * 100))
-    }
+            .attr("height", d => height - margin - timeScaleY(d.value / max_val * 100));
 
-    function deleteMarkers($scope) {
-        _.forOwn($scope.markers, markers => {
-            _.forEach(markers, marker => marker.setMap(null));
-        });
-        $scope.markers = {};
+        var brushDate = d3.brushX()
+                          .extent([[0, 0], [width, height / 2 - margin]])
+                          .on("brush", onBrush)
+                          .on("end", onBrushEnd);
+        svg.append("g").attr("class", "brush-date")
+           .call(brushDate)
+           .call(brushDate.move, [dateScaleX(new Date(2015, 9, 1)), dateScaleX(new Date(2016, 5, 30))]);
+
+        var brushTime = d3.brushX()
+                          .extent([[0, height - (height / 2 - margin)], [width, height - margin]])
+                          .on("brush", onBrush)
+                          .on("end", onBrushEnd);
+        svg.append("g").attr("class", "brush-time")
+           .call(brushTime)
+           .call(brushTime.move, [timeScaleX(6), timeScaleX(10)]);
+
+        function onBrush() {
+            var filterType = d3.select(this).attr("class").split('-').pop(),
+                scale = filterType === 'date' ? dateScaleX : timeScaleX;
+            var extent = d3.event.selection.map(scale.invert);
+            if (filterType === 'time') extent = extent.map(Math.round);
+            else extent = extent.map(d3.timeMonth.floor)
+            if ($scope.previousFilterExtent.filterType && +$scope.previousFilterExtent.filterType[0] == +extent[0] && +$scope.previousFilterExtent.filterType[1] == +extent[1])
+                return;
+            $scope.previousFilterExtent.filterType = extent;
+        }
+
+        function onBrushEnd() {
+            // if brush cleared
+            if (!d3.event.selection) {
+                console.log(this);
+                console.log("brush cleared");
+            }
+        }
+    }    
+
+    function deleteMarkers($scope, datasetType) {
+        _.forEach($scope.markers[datasetType], marker => marker.setMap(null));
+        $scope.markers[datasetType] = [];
     }
 
     // load crime/service type filter options if needed

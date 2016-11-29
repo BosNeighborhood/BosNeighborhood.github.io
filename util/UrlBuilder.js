@@ -34,9 +34,9 @@
 
             var column = datasetType === 'crime' ? 'offense_code_group'
             // todo: filter var for 311 data
-                                                 : 'tbd';
+                                                 : 'subject';
             this.url += column + ' in('
-            _.forEach(values, value => this.url += "'" + value + "', ");
+            _.forEach(values, value => this.url += '"' + encodeURIComponent(value) + "\", ");
             this.url = this.url.substring(0, this.url.length - 2);
             this.url += ')';
             return this;
