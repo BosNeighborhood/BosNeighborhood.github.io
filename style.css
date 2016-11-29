@@ -65,7 +65,7 @@ a.navbar-brand {
 
 .filter-bottom {
     position: absolute;
-    bottom: 20px;
+    bottom: 0px;
     width: 300px;
     height: 200px;
     z-index: 1;
