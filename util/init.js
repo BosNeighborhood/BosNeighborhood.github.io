@@ -1,5 +1,5 @@
-﻿define(['jquery', 'lodash', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, util, render, neighborhoods_shape) {
-    function initMap($scope) {        
+﻿define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, d3, util, render, neighborhoods_shape) {
+    function initMap($scope) {
         var region_neighborhood_ht = $scope.region_neighborhood_ht;
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
             // todo: retry if status is not OK
@@ -11,7 +11,7 @@
                 $scope.map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: bos_lat, lng: bos_lng },
                     zoom: 10
-                });                
+                });
                 var map = $scope.map;
                 google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
                     $(".filter-top").css("visibility", "initial").hide().fadeIn(600);
@@ -55,12 +55,27 @@
                 _.forOwn(region_neighborhood_ht, (value, key) => {
                     _.forEach(value, region => util.addEventListeners(region, map, region_neighborhood_ht));
                 });
-                
-                render.render($scope, "crime");
-                render.render($scope, "311");
+
+                initDateTimeFilter();
+
+                render.render($scope, "crime", true);
+                render.render($scope, "311", true);
             }
-        });        
+        });
     }
+
+    function initDateTimeFilter() {
+        var svg = d3.select(".filter-bottom");
+        var width = +svg.style("width").replace("px", ""),
+            height = +svg.style("height").replace("px", ""),
+            margin = 20;        
+        svg.append("g").attr("class", "date-filter")
+                       .append("g").attr("class", "axis")
+                            .attr("transform", "translate(0," + (height / 2 - margin) + ")");
+        svg.append("g").attr("class", "time-filter")
+                       .append("g").attr("class", "axis")
+                            .attr("transform", "translate(0," + (height - margin) + ")");        
+    }    
 
     return {
         initMap: initMap
