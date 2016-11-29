@@ -1,4 +1,4 @@
-﻿define(function () {
+﻿define(['d3'], function (d3) {
     return class UrlBuilder {
         // type: 'crime' or '311'
         constructor(datasetType) {
@@ -20,8 +20,28 @@
         }
 
         // add to where clause AND column in ('v1', 'v2', ..)
-        // column is determined by datasetType
-        addFilter(datasetType, values) {
+        addFilter(column, values) {
+            this.appendTemplate();
+            this.url += column + ' in('
+            _.forEach(values, value => this.url += '"' + encodeURIComponent(value) + "\", ");
+            this.url = this.url.substring(0, this.url.length - 2);
+            this.url += ')';
+            return this;
+        }
+
+        // add to where clause AND column op value
+        // ex: id > 10
+        addFilter(column, op, value) {
+            if (value instanceof Date) {
+                // ISO8601 Times with no timezone offset
+                value = d3.isoFormat(value).slice(0, -1);
+            }
+            this.appendTemplate();
+            this.url += column + encodeURIComponent(`${op}"${value}"`);            
+            return this;
+        }
+
+        appendTemplate() {
             if (!this.hasWhereClause) {
                 if (this.hasPreviousClause) this.url += '&'
                 else this.url += '?'
@@ -31,15 +51,6 @@
             } else {
                 this.url += ' AND ';
             }
-
-            var column = datasetType === 'crime' ? 'offense_code_group'
-            // todo: filter var for 311 data
-                                                 : 'subject';
-            this.url += column + ' in('
-            _.forEach(values, value => this.url += '"' + encodeURIComponent(value) + "\", ");
-            this.url = this.url.substring(0, this.url.length - 2);
-            this.url += ')';
-            return this;
         }
 
         // todo: addFilter(column, min, max) to filter on min < col val < max

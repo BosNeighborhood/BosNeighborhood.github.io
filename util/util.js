@@ -43,10 +43,15 @@
         }
         // todo: allow unlimited # of records?
         var urlBuilder = new UrlBuilder(datasetType).limit(1000);
+        if (datasetType === '311') {
+            // remove data before Aug 2015 since no crime data for that time period is available
+            urlBuilder.addFilter("open_dt", ">", new Date(2015, 7, 1));
+        }
         // 'All' will always come first in the list if selected
         // no need to add filters if 'All' is in list
         if (filters[0] !== 'All') {
-            urlBuilder.addFilter(datasetType, filters);
+            var column = datasetType === 'crime' ? 'offense_code_group' : 'subject';
+            urlBuilder.addFilter(column, filters);
         }        
         d3.request(urlBuilder.url)
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")

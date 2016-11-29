@@ -42,6 +42,10 @@ function ($, angular, util) {
         $scope.service_types = ['All'];
         $scope.type_filters = { selected_crime_types: ['All'], selected_service_types: ['All'] };
         $scope.previousFilterExtent = {};
+        $scope.dateScaleX = null;
+        $scope.dateScaleY = null;
+        $scope.timeScaleX = null;
+        $scope.timeScaleY = null;
 
         $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
         $("#school-select").chosen({ placeholder_text_single: '' })

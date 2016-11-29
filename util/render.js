@@ -48,6 +48,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     // received the event.   
                     var formatTime = d3.timeFormat("%a %B %d, %Y %-I%p");
                     var r = this.record;
+                    // todo: content for 311 data
                     var content = `<b>${r.offense_code_group}</b><br />
                         ${r.offense_description}<br />
                         <br />
@@ -61,20 +62,20 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
             initTypeFilterOptions($scope, datasetType, data);
             renderDateTimeFilter($scope);
+            if (d3.select("g[class^='brush']").node() == null)
+                initBrush($scope);
         });
     }
 
     function renderDateTimeFilter($scope) {
-        if (d3.select(".date-filter").node()){return;}
-        //todo: move to init code
         var data = _($scope.markers).values().flatten().map(val=>val.record).value();
         var svg = d3.select(".filter-bottom");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
             margin = 20;
         var formatMonth = d3.timeFormat("%b %Y");        
-        var dateFilter = svg.append("g").attr("class", "date-filter"),
-            timeFilter = svg.append("g").attr("class", "time-filter");
+        var dateFilter = svg.select(".date-filter"),
+            timeFilter = svg.select(".time-filter");
         // month -> [{key: month_year as Date, value: count}]
         // ordered by key
         var monthIndex = d3.nest()
@@ -84,23 +85,22 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                 .entries(data);
         var max_val = _(monthIndex).map(v=>v.value).max();
         // month
-        var dateScaleX = d3.scaleTime()
+        $scope.dateScaleX = d3.scaleTime()
                 .domain([new Date(_.first(monthIndex).key), d3.timeMonth.offset(new Date(_.last(monthIndex).key))])
                 .range([margin, width - margin]);
         // percentage
-        var dateScaleY = d3.scaleLinear()
+        $scope.dateScaleY = d3.scaleLinear()
                 .domain([0, 100])
                 .rangeRound([height / 2 - margin, 0]);
-        dateFilter.append("g").attr("class", "axis")
-                .attr("transform", "translate(0," + (height / 2 - margin) + ")")
+        d3.select(".date-filter .axis")
                 // todo: fixed total # of ticks
-                .call(d3.axisBottom(dateScaleX).ticks(d3.timeMonth.every(3)).tickFormat(tick => formatMonth(new Date(tick))));
+                .call(d3.axisBottom($scope.dateScaleX).ticks(d3.timeMonth.every(3)).tickFormat(tick => formatMonth(new Date(tick))));
         dateFilter.selectAll(".date-filter rect").data(monthIndex).enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => dateScaleX(new Date(d.key)))
-            .attr("y", d => dateScaleY(d.value / max_val * 100))
-            .attr("width", d => (dateScaleX(d3.timeMonth.offset(new Date(d.key))) - dateScaleX(new Date(d.key))) * 0.95)
-            .attr("height", d => height / 2 - margin - dateScaleY(d.value / max_val * 100));
+            .attr("x", d => $scope.dateScaleX(new Date(d.key)))
+            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100))
+            .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
+            .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
         
         var timeIndex = d3.nest()
                     .key(d=>new Date(d.occurred_on_date).getHours())
@@ -109,57 +109,21 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     .entries(data);
         max_val = _(timeIndex).map(v=>v.value).max();
         // time of day
-        var timeScaleX = d3.scaleLinear()
+        $scope.timeScaleX = d3.scaleLinear()
                 .domain([0, 24])
                 .rangeRound([margin, width - margin]);
         // percentage
-        var timeScaleY = d3.scaleLinear()
+        $scope.timeScaleY = d3.scaleLinear()
                 .domain([0, 100])
                 .rangeRound([height - margin, height - (height / 2 - margin)]);
-        timeFilter.append("g").attr("class", "axis")
-                .attr("transform", "translate(0," + (height - margin) + ")")
-                .call(d3.axisBottom(timeScaleX));
+        d3.select(".time-filter .axis")
+                .call(d3.axisBottom($scope.timeScaleX));
         timeFilter.selectAll(".time-filter rect").data(timeIndex).enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => timeScaleX(+d.key))
-            .attr("y", d => timeScaleY(d.value / max_val * 100))
-            .attr("width", d => (timeScaleX(+d.key + 1) - timeScaleX(+d.key)) * 0.95)
-            .attr("height", d => height - margin - timeScaleY(d.value / max_val * 100));
-
-        var brushDate = d3.brushX()
-                          .extent([[0, 0], [width, height / 2 - margin]])
-                          .on("brush", onBrush)
-                          .on("end", onBrushEnd);
-        svg.append("g").attr("class", "brush-date")
-           .call(brushDate)
-           .call(brushDate.move, [dateScaleX(new Date(2015, 9, 1)), dateScaleX(new Date(2016, 5, 30))]);
-
-        var brushTime = d3.brushX()
-                          .extent([[0, height - (height / 2 - margin)], [width, height - margin]])
-                          .on("brush", onBrush)
-                          .on("end", onBrushEnd);
-        svg.append("g").attr("class", "brush-time")
-           .call(brushTime)
-           .call(brushTime.move, [timeScaleX(6), timeScaleX(10)]);
-
-        function onBrush() {
-            var filterType = d3.select(this).attr("class").split('-').pop(),
-                scale = filterType === 'date' ? dateScaleX : timeScaleX;
-            var extent = d3.event.selection.map(scale.invert);
-            if (filterType === 'time') extent = extent.map(Math.round);
-            else extent = extent.map(d3.timeMonth.floor)
-            if ($scope.previousFilterExtent.filterType && +$scope.previousFilterExtent.filterType[0] == +extent[0] && +$scope.previousFilterExtent.filterType[1] == +extent[1])
-                return;
-            $scope.previousFilterExtent.filterType = extent;
-        }
-
-        function onBrushEnd() {
-            // if brush cleared
-            if (!d3.event.selection) {
-                console.log(this);
-                console.log("brush cleared");
-            }
-        }
+            .attr("x", d => $scope.timeScaleX(+d.key))
+            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100))
+            .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
+            .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));        
     }    
 
     function deleteMarkers($scope, datasetType) {
@@ -185,6 +149,47 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             var filterId = datasetType === 'crime' ? "#crime-type-filter"
                                                    : "#service-type-filter";
             $(filterId).trigger("chosen:updated");
+        }
+    }
+
+    function initBrush($scope) {
+        var svg = d3.select(".filter-bottom");
+        var width = +svg.style("width").replace("px", ""),
+            height = +svg.style("height").replace("px", ""),
+            margin = 20;
+        var brushDate = d3.brushX()
+                          .extent([[0, 0], [width, height / 2 - margin]])
+                          .on("brush", onBrush)
+                          .on("end", onBrushEnd);
+        svg.append("g").attr("class", "brush-date")
+           .call(brushDate)
+           .call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
+
+        var brushTime = d3.brushX()
+                          .extent([[0, height - (height / 2 - margin)], [width, height - margin]])
+                          .on("brush", onBrush)
+                          .on("end", onBrushEnd);
+        svg.append("g").attr("class", "brush-time")
+           .call(brushTime)
+           .call(brushTime.move, [$scope.timeScaleX(6), $scope.timeScaleX(10)]);
+
+        function onBrush() {
+            var filterType = d3.select(this).attr("class").split('-').pop(),
+                scale = filterType === 'date' ? $scope.dateScaleX : $scope.timeScaleX;
+            var extent = d3.event.selection.map(scale.invert);
+            if (filterType === 'time') extent = extent.map(Math.round);
+            else extent = extent.map(d3.timeMonth.floor)
+            if ($scope.previousFilterExtent.filterType && +$scope.previousFilterExtent.filterType[0] == +extent[0] && +$scope.previousFilterExtent.filterType[1] == +extent[1])
+                return;
+            $scope.previousFilterExtent.filterType = extent;
+        }
+
+        function onBrushEnd() {
+            // if brush cleared
+            if (!d3.event.selection) {
+                console.log(this);
+                console.log("brush cleared");
+            }
         }
     }
 
