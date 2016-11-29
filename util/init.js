@@ -58,8 +58,8 @@
 
                 initDateTimeFilter();
 
-                render.render($scope, "crime");
-                render.render($scope, "311");
+                render.render($scope, "crime", true);
+                render.render($scope, "311", true);
             }
         });
     }

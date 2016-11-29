@@ -150,6 +150,6 @@ button {
     fill: #4682b4;
 }
 
-    .bar.background {
-        fill: #ccc;
-    }
+.bar-background {
+    fill: #ccc;
+}

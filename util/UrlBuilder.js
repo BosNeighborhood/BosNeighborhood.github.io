@@ -2,12 +2,15 @@
     return class UrlBuilder {
         // type: 'crime' or '311'
         constructor(datasetType) {
-            if (datasetType === 'crime')
+            if (datasetType === 'crime') {
                 this.url = 'https://data.cityofboston.gov/resource/29yf-ye7n.json';
-            else
+                this.url += '?$select=hour,lat,long,occurred_on_date,offense_code_group,offense_description,street';
+            } else {
                 this.url = 'https://data.cityofboston.gov/resource/wc8w-nujj.json';
+                this.url += '?$select=case_title,closure_reason,latitude,longitude,neighborhood,open_dt,reason,subject';
+            }
             this.hasWhereClause = false;
-            this.hasPreviousClause = false;
+            this.hasPreviousClause = true;
         }
 
         // add $limit=value
@@ -20,7 +23,7 @@
         }
 
         // add to where clause AND column in ('v1', 'v2', ..)
-        addFilter(column, values) {
+        addInFilter(column, values) {
             this.appendTemplate();
             this.url += column + ' in('
             _.forEach(values, value => this.url += '"' + encodeURIComponent(value) + "\", ");
@@ -31,7 +34,11 @@
 
         // add to where clause AND column op value
         // ex: id > 10
-        addFilter(column, op, value) {
+        addCmpFilter(column, op, value) {
+            if (typeof value === "string"){
+                var tryParseDate = new Date(value);
+                if (tryParseDate instanceof Date) value = tryParseDate;
+            }
             if (value instanceof Date) {
                 // ISO8601 Times with no timezone offset
                 value = d3.isoFormat(value).slice(0, -1);
