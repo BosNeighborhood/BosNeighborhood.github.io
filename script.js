@@ -41,6 +41,11 @@ function ($, angular, util) {
         $scope.crime_types = ['All'];
         $scope.service_types = ['All'];
         $scope.type_filters = { selected_crime_types: ['All'], selected_service_types: ['All'] };
+        $scope.currDateTimeFilterExtent = {};
+        $scope.dateScaleX = null;
+        $scope.dateScaleY = null;
+        $scope.timeScaleX = null;
+        $scope.timeScaleY = null;
 
         $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
         $("#school-select").chosen({ placeholder_text_single: '' })
@@ -69,18 +74,24 @@ function ($, angular, util) {
                 // http://stackoverflow.com/questions/29506103/directive-updates-to-parent-scope-one-step-delayed
                 $timeout(() => {
                     //console.log($scope.type_filters.selected_crime_types);
-                    util.render($scope, 'crime');
+                    util.render($scope, 'crime', true/*updateDateTimeFilter*/);
                 });
             });
         $("#service-type-filter").chosen({ placeholder_text_multiple: 'Select 311 types' })
             .change(() => {
                 $timeout(() => {
                     //console.log($scope.type_filters.selected_service_types);
-                    util.render($scope, '311');
+                    util.render($scope, '311', true/*updateDateTimeFilter*/);
                 });
             });        
 
         util.initMap($scope);
+
+        var unbind = $scope.$watch('dateScaleX', (oldVal, newVal) => {
+            if (oldVal === newVal) return;
+            util.initBrush($scope);
+            unbind();
+        });
     });
     angular.bootstrap(document, ['BosNeighborhood']);
 });
