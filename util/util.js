@@ -82,6 +82,9 @@
         var map = $scope.map, 
             region_neighborhood_ht = $scope.region_neighborhood_ht;
         google.maps.event.addListener(polygon, 'click', function (event) {
+            // make sure enable hover & remove filter region code not triggered
+            $scope.prevZoomLevel = 0;
+            $scope.currSelectedRegion = this;
             _.forOwn(region_neighborhood_ht, (value, key) => {
                 if (value.indexOf(this) !== -1) {
                     // todo: update sidebar etc.
@@ -92,6 +95,7 @@
             map.setCenter(this.getBounds().getCenter());
             map.setZoom(getZoomByBounds(map, this.getBounds()));
             // only show records within current neighborhood            
+            // todo: performance
             _.forOwn($scope.markerCluster, (cluster, key) => {
                 cluster.clearMarkers();
                 _.forEach($scope.markers[key], marker=> {

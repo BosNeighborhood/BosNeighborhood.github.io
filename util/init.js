@@ -56,7 +56,8 @@
                     _.forEach(value, region => util.addEventListeners($scope, region));
                 });
 
-                map.addListener('zoom_changed', () => {                    
+                map.addListener('zoom_changed', () => {
+                    console.log("current zoom level: " + map.getZoom());
                     // todo: performance index
                     if (map.getZoom() <= 13 && map.getZoom() < $scope.prevZoomLevel) {
                         if (!$scope.enable_hover) {
@@ -73,6 +74,7 @@
                             cluster.clearMarkers();
                             cluster.addMarkers($scope.markers[key]);
                         });
+                        $scope.currSelectedRegion = null;
                         $scope.$emit('renderDateTimeFilter');
                     } else if (map.getZoom() > 13) {
                         if ($scope.enable_hover) {

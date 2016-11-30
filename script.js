@@ -35,14 +35,13 @@ function ($, angular, util) {
         $scope.map = null;
         $scope.prevZoomLevel = 11;
         $scope.markers = {};
-        $scope.markerCluster = {};
-        //// neighborhood -> list of markers within the neighborhood
-        //$scope.neighborhood_markers_ht = {};
+        $scope.markerCluster = {};        
         $scope.infoWindow = new google.maps.InfoWindow;
         // region -> list of polygons representing the neighborhood
         $scope.region_neighborhood_ht = {};
         // hover effect & fill color enabled / disabled
         $scope.enable_hover = true;
+        $scope.currSelectedRegion = null;
         // todo: show some stats along with the types "Theft (**19 cases**)"
         $scope.crime_types = ['All'];
         $scope.service_types = ['All'];
