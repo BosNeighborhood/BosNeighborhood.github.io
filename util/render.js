@@ -110,7 +110,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             // month
             $scope.dateScaleX = d3.scaleTime()
                 .domain([new Date(_.first(monthIndex).key), d3.timeMonth.offset(new Date(_.last(monthIndex).key))])
-                .range([margin, width - margin]);
+                .range([0, width - margin]);
             d3.select(".date-filter .axis").transition().duration(300)
                 // todo: fixed total # of ticks
                 .call(d3.axisBottom($scope.dateScaleX).ticks(d3.timeMonth.every(3)).tickFormat(tick => formatMonth(new Date(tick))));
@@ -158,7 +158,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
             // time of day
             $scope.timeScaleX = d3.scaleLinear()
                 .domain([0, 24])
-                .rangeRound([margin, width - margin]);
+                .rangeRound([0, width - margin]);
             d3.select(".time-filter .axis").transition().duration(300)
                 .call(d3.axisBottom($scope.timeScaleX));
         }

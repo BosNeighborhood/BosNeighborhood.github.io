@@ -10,11 +10,12 @@
                 // todo: hide unneccesary things on map (highways, map/satelite etc)            
                 $scope.map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: bos_lat, lng: bos_lng },
-                    zoom: 10
-                });
+                    zoom: 11,
+                    mapTypeControl: false
+                });                
                 var map = $scope.map;
                 google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
-                    $(".filter-top").css("visibility", "initial").hide().fadeIn(600);
+                    $(".filter-top").css("visibility", "initial").hide().fadeIn(600);                    
                 });
                 map.fitBounds(results[0].geometry.bounds);
                 // trigered on every change of viewport

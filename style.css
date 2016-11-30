@@ -1,7 +1,14 @@
-﻿/* Always set the map height explicitly to define the size of the div
- * element that contains the map. */
-#map {
+﻿body {
     height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', Helvetica, sans-serif;
+    font-size: 16px;
+    color: #222;
+}
+
+#map {
+    height: calc(100vh - 72px);
     padding: 0px;
 }
 
@@ -20,16 +27,8 @@
     background-repeat: repeat-x;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Lato', Helvetica, sans-serif;
-    font-size: 16px;
-    color: #222;
-}
-
 .navigation {
+    height: calc(100vh - 72px);
     outline: 1px solid #e6e6ff;
     min-height: 500px;
     padding: 0px;
@@ -37,6 +36,7 @@ html, body {
 
 .navbar-inverse {
     margin-bottom: 0px;
+    border-radius: 0px;
 }
 
 .no-margin {
@@ -64,17 +64,17 @@ a.navbar-brand {
 
 .filter-top {
     position: absolute;
+    top: 74px;
+    left: 0px;
     margin: auto;
-    left: 10%;
-    top: 105;
     z-index: 1;
     visibility: hidden;
 }
 
 .filter-bottom {
     position: absolute;
-    bottom: 10px;
-    left: 40%;
+    left: 0px;
+    bottom: 0px;
     width: 300px;
     height: 200px;
     z-index: 1;
