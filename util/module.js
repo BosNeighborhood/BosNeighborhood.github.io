@@ -6,6 +6,9 @@
 
         initMap: init.initMap,
 
-        render: render.render
+        render: render.render,
+        initBrush: render.initBrush,
+        renderDateFilter: render.renderDateFilter,
+        renderTimeFilter: render.renderTimeFilter
     };
 });
