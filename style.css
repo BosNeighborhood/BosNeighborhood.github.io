@@ -1,12 +1,13 @@
-﻿/* Always set the map height explicitly to define the size of the div
+/* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 #map {
     height: 100%;
+	padding:0px;
 }
 
 #top-header {
     position: relative;
-    padding: 15px 15px 0px 15px;
+    padding: 0px 15px 0px 15px;
     color: #ececf9;
     text-align: center;
     text-shadow: 0 1px 0 rgba(0,0,0,.1);
@@ -31,8 +32,13 @@ html, body {
 .navigation {
     outline: 1px solid #e6e6ff;
     min-height: 500px;
+	padding:0px;
 }
 
+.navbar-inverse{
+	margin-bottom:0px;
+	
+}
 .no-margin {
     margin: 4px !important;
 }
@@ -58,29 +64,51 @@ a.navbar-brand {
 
 .filter-top {
     position: absolute;
-    top: 20px;
-    z-index: 1;
+	margin: auto;  
+	  left:10%;
+	  top:105;
+	z-index: 1;
     visibility: hidden;
 }
 
 .filter-bottom {
     position: absolute;
     bottom: 10px;
+	left:40%;
     width: 300px;
     height: 200px;
     z-index: 1;
+	background-color: white;
+	opacity: 0.7;
+	padding: 2px;
     /*todo: load sequence*/
     /*visibility: hidden;*/
 }
 
+#crime_type_filter_chosen, #crime-filter select{
+	outline: 2px solid orange;
+	margin-right:4px;
+	 width: 250px;
+	
+}
+
+#service_type_filter_chosen, #service-filter select {
+	outline: 2px solid green;
+	margin-left:4px;
+	width: 250px;
+}
 select[id$='type-filter'] {
     width: 300px;
 }
 
 select[id='school-select'] {
-    width: 300px;
+    width: 270px;
+	margin:3px;
 }
 
+#school-selector {
+	padding:25px 15px 0px 15px;
+}
 h1,
 h2 {
     font-size: 24px;
