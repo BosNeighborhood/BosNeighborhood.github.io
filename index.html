@@ -1,13 +1,20 @@
-﻿﻿<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Under the Skin of the City</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />
     <link rel="stylesheet" href="third-party/avgrund/avgrund.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
     <link rel="stylesheet" href="style.css" />
 </head>
 <body ng-controller="BosNeighborhoodController">
@@ -25,16 +32,16 @@
 
     <div class="container-fluid">
         <div class="filter-top">
-            <span>
-                <select chosen multiple id="crime-type-filter"
-                        ng-model="type_filters.selected_crime_types"
-                        ng-options="type for type in crime_types"></select>
-            </span>
-            <span>
-                <select chosen multiple id="service-type-filter"
-                        ng-model="type_filters.selected_service_types"
-                        ng-options="type for type in service_types"></select>
-            </span>
+			<span id="crime-filter">
+				<select chosen multiple id="crime-type-filter"
+						ng-model="type_filters.selected_crime_types"
+						ng-options="type for type in crime_types"></select>
+			</span>
+			<span id="service-filter">
+				<select chosen multiple id="service-type-filter"
+						ng-model="type_filters.selected_service_types"
+						ng-options="type for type in service_types"></select>
+			</span>
         </div>
         <div class="row">
             <div class="col-md-8" id="map"></div>
@@ -82,6 +89,46 @@
                             </div>
                         </div>
                         <br />
+						
+						<!-- image slider -->
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					  <!-- Indicators -->
+					  <ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1"></li>
+						<li data-target="#myCarousel" data-slide-to="2"></li>
+						<li data-target="#myCarousel" data-slide-to="3"></li>
+					  </ol>
+
+					  <!-- Wrapper for slides -->
+					  <div class="carousel-inner" role="listbox">
+						<div class="item active">
+							<img src="back_bay1.jpg" class="img-responsive" class="img-thumbnail" alt="Back Bay" width="363">
+						</div>
+
+						<div class="item">
+						  <img src="img_chania2.jpg" alt="Chania">
+						</div>
+
+						<div class="item">
+						  <img src="img_flower.jpg" alt="Flower">
+						</div>
+
+						<div class="item">
+						  <img src="img_flower2.jpg" alt="Flower">
+						</div>
+					  </div>
+
+					  <!-- Left and right controls -->
+					  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					  </a>
+					  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					  </a>
+					</div>
                         <div class="desc">
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default">
@@ -161,7 +208,9 @@
         <svg class="filter-bottom"></svg>
     </div>    
     <aside id="school-selector" class="avgrund-popup">
-        <h2>Locate your school to begin</h2>
+	<div class="row">
+	  <div class="col-xs-2" ><img src="https://cdn1.iconfinder.com/data/icons/real-estate-set-3/512/3-512.png" width="50" height="50"></div>
+	  <div class="col-xs-10" style="padding:0px 0px 0px 8px;"><h2 style="display:inline;">Locate your school to begin</h2>
         <br />
         <div>
             <!--todo: autofocus-->
@@ -169,9 +218,19 @@
                     ng-model="school.selected"
                     ng-options="school for school in school_list"></select>
         </div>
-        <a href="#" ng-click="closeModal()">Skip</a>
+        <a href="#" ng-click="closeModal()">Skip</a></div>
+	</div>
+		
+
+        
     </aside>
     <script src="third-party/jquery-3.1.1.min.js"></script>
     <script data-main="script.js" src="third-party/require.js"></script>
+	<script>
+	$('.carousel').carousel({
+		interval: false
+	})
+  
+  </script>
 </body>
 </html>
