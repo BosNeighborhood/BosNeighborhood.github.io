@@ -2,7 +2,7 @@
  * element that contains the map. */
 #map {
     height: 100%;
-	padding:0px;
+    padding: 0px;
 }
 
 #top-header {
@@ -32,13 +32,13 @@ html, body {
 .navigation {
     outline: 1px solid #e6e6ff;
     min-height: 500px;
-	padding:0px;
+    padding: 0px;
 }
 
-.navbar-inverse{
-	margin-bottom:0px;
-	
+.navbar-inverse {
+    margin-bottom: 0px;
 }
+
 .no-margin {
     margin: 4px !important;
 }
@@ -64,60 +64,52 @@ a.navbar-brand {
 
 .filter-top {
     position: absolute;
-	margin: auto;  
-	  left:10%;
-	  top:105;
-	z-index: 1;
+    margin: auto;
+    left: 10%;
+    top: 105;
+    z-index: 1;
     visibility: hidden;
 }
 
 .filter-bottom {
     position: absolute;
     bottom: 10px;
-<<<<<<< HEAD
-	left:40%;
+    left: 40%;
     width: 300px;
     height: 200px;
     z-index: 1;
-	background-color: white;
-	opacity: 0.7;
-	padding: 2px;
-=======
-    width: 300px;
-    height: 200px;
-    z-index: 1;
->>>>>>> master
+    background-color: white;
+    opacity: 0.7;
+    padding: 2px;
     /*todo: load sequence*/
     /*visibility: hidden;*/
 }
 
-<<<<<<< HEAD
-#crime_type_filter_chosen, #crime-filter select{
-	outline: 2px solid orange;
-	margin-right:4px;
-	 width: 250px;
-	
+#crime_type_filter_chosen, #crime-filter select {
+    outline: 2px solid orange;
+    margin-right: 4px;
+    width: 250px;
 }
 
 #service_type_filter_chosen, #service-filter select {
-	outline: 2px solid green;
-	margin-left:4px;
-	width: 250px;
+    outline: 2px solid green;
+    margin-left: 4px;
+    width: 250px;
 }
-=======
->>>>>>> master
+
 select[id$='type-filter'] {
     width: 300px;
 }
 
 select[id='school-select'] {
     width: 270px;
-	margin:3px;
+    margin: 3px;
 }
 
 #school-selector {
-	padding:25px 15px 0px 15px;
+    padding: 25px 15px 0px 15px;
 }
+
 h1,
 h2 {
     font-size: 24px;

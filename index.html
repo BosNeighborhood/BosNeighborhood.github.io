@@ -25,16 +25,16 @@
 
     <div class="container-fluid">
         <div class="filter-top">
-			<span id="crime-filter">
-				<select chosen multiple id="crime-type-filter"
-						ng-model="type_filters.selected_crime_types"
-						ng-options="type for type in crime_types"></select>
-			</span>
-			<span id="service-filter">
-				<select chosen multiple id="service-type-filter"
-						ng-model="type_filters.selected_service_types"
-						ng-options="type for type in service_types"></select>
-			</span>
+            <span id="crime-filter">
+                <select chosen multiple id="crime-type-filter"
+                        ng-model="type_filters.selected_crime_types"
+                        ng-options="type for type in crime_types"></select>
+            </span>
+            <span id="service-filter">
+                <select chosen multiple id="service-type-filter"
+                        ng-model="type_filters.selected_service_types"
+                        ng-options="type for type in service_types"></select>
+            </span>
         </div>
         <div class="row">
             <div class="col-md-8" id="map"></div>
@@ -159,26 +159,25 @@
             </div>
         </div>
         <svg class="filter-bottom"></svg>
-    </div>    
+    </div>
     <aside id="school-selector" class="avgrund-popup">
-	<div class="row">
-	  <div class="col-xs-2" ><img src="https://cdn1.iconfinder.com/data/icons/real-estate-set-3/512/3-512.png" width="50" height="50"></div>
-	  <div class="col-xs-10" style="padding:0px 0px 0px 8px;"><h2 style="display:inline;">Locate your school to begin</h2>
-        <br />
-        <div>
-            <!--todo: autofocus-->
-            <select chosen id="school-select"
-                    ng-model="school.selected"
-                    ng-options="school for school in school_list"></select>
+        <div class="row">
+            <div class="col-xs-2"><img src="https://cdn1.iconfinder.com/data/icons/real-estate-set-3/512/3-512.png" width="50" height="50"></div>
+            <div class="col-xs-10" style="padding:0px 0px 0px 8px;">
+                <h2 style="display:inline;">Locate your school to begin</h2>
+                <br />
+                <div>
+                    <!--todo: autofocus-->
+                    <select chosen id="school-select"
+                            ng-model="school.selected"
+                            ng-options="school for school in school_list"></select>
+                </div>
+                <a href="#" ng-click="closeModal()">Skip</a>
+            </div>
         </div>
-        <a href="#" ng-click="closeModal()">Skip</a></div>
-	</div>
-		
-
-        
     </aside>
     <script src="third-party/jquery-3.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script data-main="script.js" src="third-party/require.js"></script>	
+    <script data-main="script.js" src="third-party/require.js"></script>
 </body>
 </html>
