@@ -68,7 +68,7 @@
 
                         // remove filter on neighborhood, show all markers
                         // todo: add a flag, only do so when necessary
-                        _($scope.markers).values().flatten().forEach(marker=>marker.setMap(map));
+                        _($scope.markers).values().flatten().forEach(marker=>marker.setVisible(true));
                         _.forOwn($scope.markerCluster, (cluster, key) => {
                             cluster.clearMarkers();
                             cluster.addMarkers($scope.markers[key]);

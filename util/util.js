@@ -96,12 +96,12 @@
                 cluster.clearMarkers();
                 _.forEach($scope.markers[key], marker=> {
                     if (!google.maps.geometry.poly.containsLocation(marker.getPosition(), this)) {
-                        marker.setMap(null);
+                        marker.setVisible(false);
                     } else {
-                        marker.setMap($scope.map);
+                        marker.setVisible(true);
                     }
                 });
-                cluster.addMarkers(_.filter($scope.markers[key], marker=>marker.getMap()));
+                cluster.addMarkers(_.filter($scope.markers[key], marker=>marker.getVisible()));
             });
             $scope.$emit('renderDateTimeFilter');
         });

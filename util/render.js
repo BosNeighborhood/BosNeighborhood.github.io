@@ -37,7 +37,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                     .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
                     .map(record => new google.maps.Marker({
                         position: { lat: +record.lat, lng: +record.long },
-                        map: $scope.map,
+                        visible: true,
                         record: record
                     })).value();
                 _.forEach($scope.markers[datasetType], marker => {
@@ -82,11 +82,11 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
 
     function renderDateFilter($scope) {
         // only consider markers shown on map
-        var data = _($scope.markers).values().flatten().filter(val=>val.getMap()).map(val=>val.record).value();
-        console.log("date filter");
-        console.log($scope.markers);
-        console.log(data);
-        console.log(data.length);
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();
+        //console.log("date filter");
+        //console.log($scope.markers);
+        //console.log(data);
+        //console.log(data.length);
         // todo: remove bars
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
@@ -139,11 +139,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
 
     function renderTimeFilter($scope) {
         // only consider markers shown on map
-        var data = _($scope.markers).values().flatten().filter(val=>val.getMap()).map(val=>val.record).value();
-        console.log("time filter");
-        console.log($scope.markers);
-        console.log(data);
-        console.log(data.length);
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();        
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
         var width = +svg.style("width").replace("px", ""),
