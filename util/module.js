@@ -7,6 +7,8 @@
         initMap: init.initMap,
 
         render: render.render,
-        initBrush: render.initBrush
+        initBrush: render.initBrush,
+        renderDateFilter: render.renderDateFilter,
+        renderTimeFilter: render.renderTimeFilter
     };
 });

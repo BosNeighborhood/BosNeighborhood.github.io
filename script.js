@@ -10,7 +10,7 @@ require.config({
     paths: {
         shapefile: '../shapefile',
         util: '../util',
-        google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ',
+        google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ&libraries=geometry',
         angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min',
         jquery: 'jquery-3.1.1.min'
     },
@@ -33,12 +33,15 @@ function ($, angular, util) {
         $scope.school_marker = null;
         $scope.closeModal = () => Avgrund.hide();
         $scope.map = null;
+        $scope.prevZoomLevel = 11;
         $scope.markers = {};
-        $scope.markerCluster = {};
+        $scope.markerCluster = {};        
         $scope.infoWindow = new google.maps.InfoWindow;
+        // region -> list of polygons representing the neighborhood
         $scope.region_neighborhood_ht = {};
         // hover effect & fill color enabled / disabled
         $scope.enable_hover = true;
+        $scope.currSelectedRegion = null;
         // todo: show some stats along with the types "Theft (**19 cases**)"
         $scope.crime_types = ['All'];
         $scope.service_types = ['All'];

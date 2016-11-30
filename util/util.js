@@ -42,7 +42,7 @@
             return;
         }
         // todo: allow unlimited # of records?
-        var urlBuilder = new UrlBuilder(datasetType).limit(50000);
+        var urlBuilder = new UrlBuilder(datasetType).limit(500);
         if (datasetType === '311') {
             // remove data before Aug 2015 since no crime data for that time period is available
             urlBuilder.addCmpFilter("open_dt", ">", new Date(2015, 7, 1));
@@ -78,8 +78,13 @@
             .get(callback);
     }
 
-    function addEventListeners(polygon, map, region_neighborhood_ht) {
+    function addEventListeners($scope, polygon) {
+        var map = $scope.map, 
+            region_neighborhood_ht = $scope.region_neighborhood_ht;
         google.maps.event.addListener(polygon, 'click', function (event) {
+            // make sure enable hover & remove filter region code not triggered
+            $scope.prevZoomLevel = 0;
+            $scope.currSelectedRegion = this;
             _.forOwn(region_neighborhood_ht, (value, key) => {
                 if (value.indexOf(this) !== -1) {
                     // todo: update sidebar etc.
@@ -89,6 +94,20 @@
             });
             map.setCenter(this.getBounds().getCenter());
             map.setZoom(getZoomByBounds(map, this.getBounds()));
+            // only show records within current neighborhood            
+            // todo: performance
+            _.forOwn($scope.markerCluster, (cluster, key) => {
+                cluster.clearMarkers();
+                _.forEach($scope.markers[key], marker=> {
+                    if (!google.maps.geometry.poly.containsLocation(marker.getPosition(), this)) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                });
+                cluster.addMarkers(_.filter($scope.markers[key], marker=>marker.getVisible()));
+            });
+            $scope.$emit('renderDateTimeFilter');
         });
         google.maps.event.addListener(polygon, 'mouseover', function (event) {
             // Within the event listener, "this" refers to the polygon which

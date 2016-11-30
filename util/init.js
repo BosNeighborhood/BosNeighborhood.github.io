@@ -53,18 +53,30 @@
                 });
 
                 _.forOwn(region_neighborhood_ht, (value, key) => {
-                    _.forEach(value, region => util.addEventListeners(region, map, region_neighborhood_ht));
+                    _.forEach(value, region => util.addEventListeners($scope, region));
                 });
 
                 map.addListener('zoom_changed', () => {
-                    if (map.getZoom() <= 13) {
+                    console.log("current zoom level: " + map.getZoom());
+                    // todo: performance index
+                    if (map.getZoom() <= 13 && map.getZoom() < $scope.prevZoomLevel) {
                         if (!$scope.enable_hover) {
                             _.forOwn($scope.region_neighborhood_ht, value => {
                                 _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
                             });
                         }
                         $scope.enable_hover = true;
-                    } else {
+
+                        // remove filter on neighborhood, show all markers
+                        // todo: add a flag, only do so when necessary
+                        _($scope.markers).values().flatten().forEach(marker=>marker.setVisible(true));
+                        _.forOwn($scope.markerCluster, (cluster, key) => {
+                            cluster.clearMarkers();
+                            cluster.addMarkers($scope.markers[key]);
+                        });
+                        $scope.currSelectedRegion = null;
+                        $scope.$emit('renderDateTimeFilter');
+                    } else if (map.getZoom() > 13) {
                         if ($scope.enable_hover) {
                             _.forOwn($scope.region_neighborhood_ht, value => {
                                 _.forEach(value, region => region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }));
@@ -72,12 +84,18 @@
                         }
                         $scope.enable_hover = false;
                     }
+                    $scope.prevZoomLevel = map.getZoom();
                 });
 
                 initDateTimeFilter();
 
                 render.render($scope, "crime", true);
                 render.render($scope, "311", true);
+
+                $scope.$on('renderDateTimeFilter', function () {
+                    render.renderDateFilter($scope);
+                    render.renderTimeFilter($scope);
+                });
             }
         });
     }

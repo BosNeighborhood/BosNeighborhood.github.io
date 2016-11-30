@@ -35,10 +35,16 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                 // create new markers            
                 $scope.markers[datasetType] = _(data)
                     .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
-                    .map(record => new google.maps.Marker({
-                        position: { lat: +record.lat, lng: +record.long },
-                        record: record
-                    })).value();
+                    .map(record => {
+                        var visible = $scope.currSelectedRegion 
+                                        ? google.maps.geometry.poly.containsLocation(new google.maps.LatLng(+record.lat, +record.long), $scope.currSelectedRegion)
+                                        : true;
+                        return new google.maps.Marker({
+                            position: { lat: +record.lat, lng: +record.long },
+                            visible: visible,
+                            record: record
+                        })
+                    }).value();
                 _.forEach($scope.markers[datasetType], marker => {
                     google.maps.event.addListener(marker, 'click', function (event) {
                         // Within the event listener, "this" refers to the polygon which
@@ -59,7 +65,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                 // update marker cluster
                 if ($scope.markerCluster[datasetType]){
                     $scope.markerCluster[datasetType].clearMarkers();
-                    $scope.markerCluster[datasetType].addMarkers($scope.markers[datasetType]);
+                    $scope.markerCluster[datasetType].addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
                 }
                 else
                     $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
@@ -80,7 +86,8 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
     }
 
     function renderDateFilter($scope) {
-        var data = _($scope.markers).values().flatten().map(val=>val.record).value();
+        // only consider markers shown on map
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();        
         // todo: remove bars
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
@@ -132,7 +139,8 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
     }
 
     function renderTimeFilter($scope) {
-        var data = _($scope.markers).values().flatten().map(val=>val.record).value();
+        // only consider markers shown on map
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();        
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
         var width = +svg.style("width").replace("px", ""),
@@ -280,6 +288,8 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
 
     return {
         render: render,
-        initBrush: initBrush
+        initBrush: initBrush,
+        renderDateFilter: renderDateFilter,
+        renderTimeFilter: renderTimeFilter
     };
 });
