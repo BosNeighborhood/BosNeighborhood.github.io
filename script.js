@@ -37,6 +37,8 @@ function ($, angular, util) {
         $scope.markerCluster = {};
         $scope.infoWindow = new google.maps.InfoWindow;
         $scope.region_neighborhood_ht = {};
+        // hover effect & fill color enabled / disabled
+        $scope.enable_hover = true;
         // todo: show some stats along with the types "Theft (**19 cases**)"
         $scope.crime_types = ['All'];
         $scope.service_types = ['All'];

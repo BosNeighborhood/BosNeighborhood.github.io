@@ -26,7 +26,7 @@
                     var sw = bounds.getSouthWest(); // LatLng of the south-west corder
                     var nw = new google.maps.LatLng(ne.lat(), sw.lng());
                     var se = new google.maps.LatLng(sw.lat(), ne.lng());
-                });
+                });                
                 // load neighborhood borders as polygons
                 _.forEach(neighborhoods_shape.features, neighborhood => {
                     if (neighborhood.geometry.type === "Polygon") {
@@ -54,6 +54,24 @@
 
                 _.forOwn(region_neighborhood_ht, (value, key) => {
                     _.forEach(value, region => util.addEventListeners(region, map, region_neighborhood_ht));
+                });
+
+                map.addListener('zoom_changed', () => {
+                    if (map.getZoom() <= 13) {
+                        if (!$scope.enable_hover) {
+                            _.forOwn($scope.region_neighborhood_ht, value => {
+                                _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
+                            });
+                        }
+                        $scope.enable_hover = true;
+                    } else {
+                        if ($scope.enable_hover) {
+                            _.forOwn($scope.region_neighborhood_ht, value => {
+                                _.forEach(value, region => region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }));
+                            });
+                        }
+                        $scope.enable_hover = false;
+                    }
                 });
 
                 initDateTimeFilter();
