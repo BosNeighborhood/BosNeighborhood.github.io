@@ -1,6 +1,6 @@
 ﻿/// <reference path="../third-party/lodash.js" />
 
-define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
+define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_, util, d3, Debounce) {
     // datasetType: 'crime' or '311'
     function render($scope, datasetType, updateDateTimeFilter) {
         return new Promise((resolve, reject) => {
@@ -220,6 +220,7 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
                           .extent([[0, 0], [width, height / 2 - margin]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
+        var eventSelection = {};
         svg.append("g").attr("class", "brush-date")
            .call(brushDate)
            .call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
@@ -233,20 +234,24 @@ define(['lodash', 'util/util', 'd3', 'google_map'], function (_, util, d3) {
 
         function onBrush() {
             var filterType = d3.select(this).attr("class").split('-').pop();
-            doBrush(filterType);
+            eventSelection[filterType] = d3.event.selection.slice();
+            Debounce.observed(filterType, $scope);
         }
 
         function onBrushEnd() {
             // if brush cleared
             if (!d3.event.selection) {
                 var filterType = d3.select(this).attr("class").split('-').pop();
-                doBrush(filterType);
+                eventSelection[filterType] = d3.event.selection.slice();
+                Debounce.observed(filterType, $scope);
             }
         }
 
+        $scope.$on('debounceAccept', (event, filterType) => doBrush(filterType));
+
         function doBrush(filterType) {
             var scale = filterType === 'date' ? $scope.dateScaleX : $scope.timeScaleX,
-                selection = d3.event.selection;
+                selection = eventSelection[filterType];
             if (!selection) {
                 // brush cleared, select all
                 selection = [0, width];
