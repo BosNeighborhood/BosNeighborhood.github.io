@@ -6,8 +6,9 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
         return new Promise((resolve, reject) => {
             // load new data
             var filters = datasetType === "crime" ? $scope.type_filters.selected_crime_types
-                                                  : $scope.type_filters.selected_service_types;
-            util.requestData(datasetType, filters, $scope.currDateTimeFilterExtent, (error, response) => {
+                                                  : $scope.type_filters.selected_service_types,
+                latLngBounds = $scope.currSelectedRegion ? $scope.currSelectedRegion.getBounds() : null;
+            util.requestData(datasetType, filters, $scope.currDateTimeFilterExtent, latLngBounds, (error, response) => {
                 if (error) {
                     console.log(error);
                 }

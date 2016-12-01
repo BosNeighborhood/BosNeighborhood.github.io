@@ -35,7 +35,7 @@
         return 0;
     }
 
-    function requestData(datasetType, filters, dateTimeFilters, callback) {
+    function requestData(datasetType, filters, dateTimeFilters, latLngBounds, callback) {
         if (filters.length === 0) {
             // no filter selected, return nothing
             callback(null, { response: JSON.stringify([]) });
@@ -73,6 +73,16 @@
                 }
             }
         });
+        if (latLngBounds) {
+            var lookup = {
+                crime: {lat: 'lat', lng: 'long'},
+                311: {lat: 'latitude', lng: 'longitude'}
+            };
+            urlBuilder.addCmpFilter(lookup[datasetType].lat, '>=', latLngBounds.getSouthWest().lat());
+            urlBuilder.addCmpFilter(lookup[datasetType].lat, '<=', latLngBounds.getNorthEast().lat());
+            urlBuilder.addCmpFilter(lookup[datasetType].lng, '>=', latLngBounds.getSouthWest().lng());
+            urlBuilder.addCmpFilter(lookup[datasetType].lng, '<=', latLngBounds.getNorthEast().lng());
+        }
         d3.request(urlBuilder.url)
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
             .get(callback);

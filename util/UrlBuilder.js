@@ -35,6 +35,7 @@
         // add to where clause AND column op value
         // ex: id > 10
         addCmpFilter(column, op, value) {
+            var quote = '"';
             if (typeof value === "string"){
                 var tryParseDate = new Date(value);
                 if (tryParseDate instanceof Date) value = tryParseDate;
@@ -43,8 +44,9 @@
                 // ISO8601 Times with no timezone offset
                 value = d3.isoFormat(value).slice(0, -1);
             }
+            if (typeof value === 'number') quote = '';
             this.appendTemplate();
-            this.url += column + encodeURIComponent(`${op}"${value}"`);            
+            this.url += column + encodeURIComponent(`${op}${quote}${value}${quote}`);
             return this;
         }
 
