@@ -72,13 +72,14 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                         $scope.infoWindow.open($scope.map);
                     });
                 });
+                var imagePath = datasetType === "crime" ? "/data/img/crime/m" : "/data/img/311/m";
                 // update marker cluster
                 if ($scope.markerCluster[datasetType]){
                     $scope.markerCluster[datasetType].clearMarkers();
                     $scope.markerCluster[datasetType].addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
                 }
                 else
-                    $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+                    $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: imagePath });
                 initTypeFilterOptions($scope, datasetType, data);
 
                 if (needUpdateDateTimeFilter) {
