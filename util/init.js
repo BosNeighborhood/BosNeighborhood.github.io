@@ -28,7 +28,25 @@
                 //    var nw = new google.maps.LatLng(ne.lat(), sw.lng());
                 //    var se = new google.maps.LatLng(sw.lat(), ne.lng());
                 //});
-                google.maps.event.addListener(map, 'click', () => {
+                google.maps.event.addListener(map, 'click', (e) => {
+                    // deal with strange behavior that the first click on polygon
+                    // after pageload / render will go to handler on map not the polygon
+                    if (!$scope.regionClickDisabled && e) {
+                        _.forOwn($scope.region_neighborhood_ht, value => {
+                            _.forEach(value, region => {
+                                if (google.maps.geometry.poly.containsLocation(e.latLng, region)) {
+                                    // propagate click to polygon
+                                    google.maps.event.trigger(region, 'click', e);
+                                    return;
+                                }
+                            });
+                        });
+                    }
+                    // click inside selected region, do nothing
+                    if ($scope.currSelectedRegion && e
+                        && google.maps.geometry.poly.containsLocation(e.latLng, $scope.currSelectedRegion))
+                        return;
+
                     // enable click event on all regions
                     $scope.regionClickDisabled = false;
                     // remove neighborhood filter if any
@@ -71,7 +89,6 @@
                 });
 
                 map.addListener('zoom_changed', () => {
-                    console.log("current zoom level: " + map.getZoom());
                     // todo: performance index
                     if (map.getZoom() <= 13 && map.getZoom() < $scope.prevZoomLevel) {
                         // zoomed out (far view), show selected region polygon
@@ -108,7 +125,7 @@
     function addEventListeners($scope, polygon) {
         var map = $scope.map,
             region_neighborhood_ht = $scope.region_neighborhood_ht;
-        google.maps.event.addListener(polygon, 'click', function (event) {
+        google.maps.event.addListener(polygon, 'click', function (e) {
             if (!$scope.regionClickDisabled) {
                 // make sure enable hover & remove filter region code not triggered
                 $scope.prevZoomLevel = 0;
@@ -132,9 +149,13 @@
 
                 render.renderAll($scope);
             }
-            else {
-                // propagate event to map
-                google.maps.event.trigger($scope.map, 'click', null);
+            else {                
+                // propagate event to map if not clicking selected region
+                if ($scope.currSelectedRegion && e
+                    && !google.maps.geometry.poly.containsLocation(e.latLng, $scope.currSelectedRegion)) {
+                    // propagate click to map
+                    google.maps.event.trigger($scope.map, 'click', e);
+                }                
             }
         });
         google.maps.event.addListener(polygon, 'mouseover', function (event) {
