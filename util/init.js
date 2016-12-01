@@ -1,4 +1,4 @@
-﻿define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, d3, util, render, neighborhoods_shape) {
+define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map', 'markerclusterer'], function ($, _, d3, util, render, neighborhoods_shape) {
     function initMap($scope) {
         var region_neighborhood_ht = $scope.region_neighborhood_ht;
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
@@ -70,10 +70,10 @@
                                 map: map,
                                 paths: _.map(polygon, point => new google.maps.LatLng(+point[1], +point[0])),
                                 // todo: style
-                                strokeColor: '#ff0000',
+                                strokeColor: '#ff8080',
                                 strokeOpacity: 0.8,
                                 strokeWeight: 2,
-                                fillColor: '#ff0000',
+                                fillColor: '#ff8080',
                                 fillOpacity: 0.5
                             });
                             if (!_.has(region_neighborhood_ht, neighborhood.properties.Name)) {
@@ -162,14 +162,14 @@
             // Within the event listener, "this" refers to the polygon which
             // received the event.
             this.setOptions({
-                strokeColor: '#00ff00',
-                fillColor: '#00ff00'
+                strokeColor: '#b3ffb3',
+                fillColor: '#ccffcc'
             });
         });
         google.maps.event.addListener(polygon, 'mouseout', function (event) {
             this.setOptions({
-                strokeColor: '#ff0000',
-                fillColor: '#ff0000'
+                strokeColor: '#ff8080',
+                fillColor: '#ff8080'
             });
         });
     }
