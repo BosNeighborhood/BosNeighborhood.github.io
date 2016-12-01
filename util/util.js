@@ -86,58 +86,10 @@
         d3.request(urlBuilder.url)
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
             .get(callback);
-    }
-
-    function addEventListeners($scope, polygon) {
-        var map = $scope.map, 
-            region_neighborhood_ht = $scope.region_neighborhood_ht;
-        google.maps.event.addListener(polygon, 'click', function (event) {
-            // make sure enable hover & remove filter region code not triggered
-            $scope.prevZoomLevel = 0;
-            $scope.currSelectedRegion = this;
-            _.forOwn(region_neighborhood_ht, (value, key) => {
-                if (value.indexOf(this) !== -1) {
-                    // todo: update sidebar etc.
-                    // key is the name of the neighborhood
-                    //alert(key);
-                }
-            });
-            map.setCenter(this.getBounds().getCenter());
-            map.setZoom(getZoomByBounds(map, this.getBounds()));
-            // only show records within current neighborhood            
-            // todo: performance
-            _.forOwn($scope.markerCluster, (cluster, key) => {
-                cluster.clearMarkers();
-                _.forEach($scope.markers[key], marker=> {
-                    if (!google.maps.geometry.poly.containsLocation(marker.getPosition(), this)) {
-                        marker.setVisible(false);
-                    } else {
-                        marker.setVisible(true);
-                    }
-                });
-                cluster.addMarkers(_.filter($scope.markers[key], marker=>marker.getVisible()));
-            });
-            $scope.$emit('renderDateTimeFilter');
-        });
-        google.maps.event.addListener(polygon, 'mouseover', function (event) {
-            // Within the event listener, "this" refers to the polygon which
-            // received the event.
-            this.setOptions({
-                strokeColor: '#00ff00',
-                fillColor: '#00ff00'
-            });
-        });
-        google.maps.event.addListener(polygon, 'mouseout', function (event) {
-            this.setOptions({
-                strokeColor: '#ff0000',
-                fillColor: '#ff0000'
-            });
-        });        
-    }
+    }    
 
     return {
         getZoomByBounds: getZoomByBounds,
         requestData: requestData,
-        addEventListeners: addEventListeners
     };
 });

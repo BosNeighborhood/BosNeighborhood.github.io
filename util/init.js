@@ -54,7 +54,7 @@
                 });
 
                 _.forOwn(region_neighborhood_ht, (value, key) => {
-                    _.forEach(value, region => util.addEventListeners($scope, region));
+                    _.forEach(value, region => addEventListeners($scope, region));
                 });
 
                 map.addListener('zoom_changed', () => {
@@ -76,7 +76,7 @@
                             cluster.addMarkers($scope.markers[key]);
                         });
                         $scope.currSelectedRegion = null;
-                        $scope.$emit('renderDateTimeFilter');
+                        render.updateDateTimeFilter($scope);
                     } else if (map.getZoom() > 13) {
                         if ($scope.enable_hover) {
                             _.forOwn($scope.region_neighborhood_ht, value => {
@@ -90,14 +90,53 @@
 
                 initDateTimeFilter();
 
-                render.render($scope, "crime", true);
-                render.render($scope, "311", true);
-
-                $scope.$on('renderDateTimeFilter', function () {
-                    render.renderDateFilter($scope);
-                    render.renderTimeFilter($scope);
+                Promise.all([
+                    render.render($scope, 'crime'),
+                    render.render($scope, '311')
+                ]).then(() => {
+                    render.updateDateTimeFilter($scope);
                 });
             }
+        });
+    }
+
+    function addEventListeners($scope, polygon) {
+        var map = $scope.map,
+            region_neighborhood_ht = $scope.region_neighborhood_ht;
+        google.maps.event.addListener(polygon, 'click', function (event) {
+            // make sure enable hover & remove filter region code not triggered
+            $scope.prevZoomLevel = 0;
+            $scope.currSelectedRegion = this;
+            _.forOwn(region_neighborhood_ht, (value, key) => {
+                if (value.indexOf(this) !== -1) {
+                    // todo: update sidebar etc.
+                    // key is the name of the neighborhood
+                    //alert(key);
+                }
+            });
+            map.setCenter(this.getBounds().getCenter());
+            map.setZoom(util.getZoomByBounds(map, this.getBounds()));
+            // only show records within current neighborhood            
+            Promise.all([
+              render.render($scope, 'crime'),
+              render.render($scope, '311')
+            ]).then(() => {
+                render.updateDateTimeFilter($scope);
+            });            
+        });
+        google.maps.event.addListener(polygon, 'mouseover', function (event) {
+            // Within the event listener, "this" refers to the polygon which
+            // received the event.
+            this.setOptions({
+                strokeColor: '#00ff00',
+                fillColor: '#00ff00'
+            });
+        });
+        google.maps.event.addListener(polygon, 'mouseout', function (event) {
+            this.setOptions({
+                strokeColor: '#ff0000',
+                fillColor: '#ff0000'
+            });
         });
     }
 

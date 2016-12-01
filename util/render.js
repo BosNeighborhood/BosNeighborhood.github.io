@@ -73,12 +73,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                 initTypeFilterOptions($scope, datasetType, data);
 
                 if (updateDateTimeFilter) {
-                    renderDateFilter($scope);
-                    renderTimeFilter($scope);
-                    if ($scope.currDateTimeFilterExtent.date)
-                        updateDateFilterStyle($scope.currDateTimeFilterExtent.date);
-                    if ($scope.currDateTimeFilterExtent.time)
-                        updateTimeFilterStyle($scope.currDateTimeFilterExtent.time);
+                    updateDateTimeFilter($scope);
                 }
 
                 resolve();
@@ -292,10 +287,18 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
           .classed("bar-background", d=> +d.key > extent[1] || +d.key < extent[0]);
     }
 
+    function updateDateTimeFilter($scope) {
+        renderDateFilter($scope);
+        renderTimeFilter($scope);
+        if ($scope.currDateTimeFilterExtent.date)
+            updateDateFilterStyle($scope.currDateTimeFilterExtent.date);
+        if ($scope.currDateTimeFilterExtent.time)
+            updateTimeFilterStyle($scope.currDateTimeFilterExtent.time);
+    }
+
     return {
         render: render,
         initBrush: initBrush,
-        renderDateFilter: renderDateFilter,
-        renderTimeFilter: renderTimeFilter
+        updateDateTimeFilter: updateDateTimeFilter
     };
 });
