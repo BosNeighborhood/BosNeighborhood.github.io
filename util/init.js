@@ -162,14 +162,14 @@
             // Within the event listener, "this" refers to the polygon which
             // received the event.
             this.setOptions({
-                strokeColor: '#00ff00',
-                fillColor: '#00ff00'
+                strokeColor: '#b3ffb3',
+                fillColor: '#ccffcc'
             });
         });
         google.maps.event.addListener(polygon, 'mouseout', function (event) {
             this.setOptions({
-                strokeColor: '#ff0000',
-                fillColor: '#ff0000'
+                strokeColor: '#ff8080',
+                fillColor: '#ff8080'
             });
         });
     }
