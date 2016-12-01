@@ -92,7 +92,7 @@ a.navbar-brand {
 }
 
 #service_type_filter_chosen, #service-filter select {
-    outline: 2px solid green;
+    outline: 2px solid blue;
     margin-left: 4px;
     width: 250px;
 }
