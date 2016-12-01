@@ -21,13 +21,24 @@
                 // trigered on every change of viewport
                 // todo: limit zoom/pan level/area cannot move outside bos
                 // this is not currently used
-                google.maps.event.addListener(map, 'idle', () => {
-                    var bounds = map.getBounds();
-                    var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-                    var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-                    var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-                    var se = new google.maps.LatLng(sw.lat(), ne.lng());
-                });                
+                //google.maps.event.addListener(map, 'idle', () => {
+                //    var bounds = map.getBounds();
+                //    var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+                //    var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+                //    var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+                //    var se = new google.maps.LatLng(sw.lat(), ne.lng());
+                //});
+                google.maps.event.addListener(map, 'click', () => {
+                    // remove neighborhood filter if any
+                    if ($scope.currSelectedRegion) {
+                        $scope.currSelectedRegion = null;
+                        // show all regions
+                        _.forOwn($scope.region_neighborhood_ht, value => {
+                            _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
+                        });
+                        render.renderAll($scope);
+                    }
+                });
                 // load neighborhood borders as polygons
                 _.forEach(neighborhoods_shape.features, neighborhood => {
                     if (neighborhood.geometry.type === "Polygon") {
@@ -61,24 +72,22 @@
                     console.log("current zoom level: " + map.getZoom());
                     // todo: performance index
                     if (map.getZoom() <= 13 && map.getZoom() < $scope.prevZoomLevel) {
+                        // zoomed out (far view), show selected region polygon
+                        // or all region polygons if there're no selected region
                         if (!$scope.enable_hover) {
-                            _.forOwn($scope.region_neighborhood_ht, value => {
-                                _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
-                            });
+                            if (!$scope.currSelectedRegion){
+                                _.forOwn($scope.region_neighborhood_ht, value => {
+                                    _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
+                                });
+                            }
+                            else {
+                                $scope.currSelectedRegion.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 });
+                            }
                         }
-                        $scope.enable_hover = true;
-
-                        // remove filter on neighborhood, show all markers
-                        // todo: add a flag, only do so when necessary
-                        _($scope.markers).values().flatten().forEach(marker=>marker.setVisible(true));
-                        _.forOwn($scope.markerCluster, (cluster, key) => {
-                            cluster.clearMarkers();
-                            cluster.addMarkers($scope.markers[key]);
-                        });
-                        $scope.currSelectedRegion = null;
-                        render.updateDateTimeFilter($scope);
+                        $scope.enable_hover = true;                        
                     } else if (map.getZoom() > 13) {
                         if ($scope.enable_hover) {
+                            // hide all region polygons in street view
                             _.forOwn($scope.region_neighborhood_ht, value => {
                                 _.forEach(value, region => region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }));
                             });
@@ -89,13 +98,7 @@
                 });
 
                 initDateTimeFilter();
-
-                Promise.all([
-                    render.render($scope, 'crime'),
-                    render.render($scope, '311')
-                ]).then(() => {
-                    render.updateDateTimeFilter($scope);
-                });
+                render.renderAll($scope);
             }
         });
     }
@@ -115,14 +118,13 @@
                 }
             });
             map.setCenter(this.getBounds().getCenter());
-            map.setZoom(util.getZoomByBounds(map, this.getBounds()));
+            map.setZoom(util.getZoomByBounds(map, this.getBounds()));            
+            // hide all other region polygons
+            _.forOwn($scope.region_neighborhood_ht, value => {
+                _.forEach(value, region => {if (region !== this) region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 })});
+            });
             // only show records within current neighborhood            
-            Promise.all([
-              render.render($scope, 'crime'),
-              render.render($scope, '311')
-            ]).then(() => {
-                render.updateDateTimeFilter($scope);
-            });            
+            render.renderAll($scope);
         });
         google.maps.event.addListener(polygon, 'mouseover', function (event) {
             // Within the event listener, "this" refers to the polygon which

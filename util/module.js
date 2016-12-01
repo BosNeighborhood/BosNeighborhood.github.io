@@ -7,6 +7,6 @@
 
         render: render.render,
         initBrush: render.initBrush,
-        updateDateTimeFilter: render.updateDateTimeFilter
+        renderAll: render.renderAll
     };
 });
