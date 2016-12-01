@@ -29,6 +29,8 @@
                 //    var se = new google.maps.LatLng(sw.lat(), ne.lng());
                 //});
                 google.maps.event.addListener(map, 'click', () => {
+                    // enable click event on all regions
+                    $scope.regionClickDisabled = false;
                     // remove neighborhood filter if any
                     if ($scope.currSelectedRegion) {
                         $scope.currSelectedRegion = null;
@@ -107,24 +109,33 @@
         var map = $scope.map,
             region_neighborhood_ht = $scope.region_neighborhood_ht;
         google.maps.event.addListener(polygon, 'click', function (event) {
-            // make sure enable hover & remove filter region code not triggered
-            $scope.prevZoomLevel = 0;
-            $scope.currSelectedRegion = this;
-            _.forOwn(region_neighborhood_ht, (value, key) => {
-                if (value.indexOf(this) !== -1) {
-                    // todo: update sidebar etc.
-                    // key is the name of the neighborhood
-                    //alert(key);
-                }
-            });
-            map.setCenter(this.getBounds().getCenter());
-            map.setZoom(util.getZoomByBounds(map, this.getBounds()));            
-            // hide all other region polygons
-            _.forOwn($scope.region_neighborhood_ht, value => {
-                _.forEach(value, region => {if (region !== this) region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 })});
-            });
-            // only show records within current neighborhood            
-            render.renderAll($scope);
+            if (!$scope.regionClickDisabled) {
+                // make sure enable hover & remove filter region code not triggered
+                $scope.prevZoomLevel = 0;
+                // diable click event handler on all regions
+                $scope.regionClickDisabled = true;
+                // set region filter
+                $scope.currSelectedRegion = this;
+                _.forOwn(region_neighborhood_ht, (value, key) => {
+                    if (value.indexOf(this) !== -1) {
+                        // todo: update sidebar etc.
+                        // key is the name of the neighborhood
+                        //alert(key);
+                    }
+                });
+                map.setCenter(this.getBounds().getCenter());
+                map.setZoom(util.getZoomByBounds(map, this.getBounds()));
+                // hide all other region polygons
+                _.forOwn($scope.region_neighborhood_ht, value => {
+                    _.forEach(value, region => { if (region !== this) region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }) });
+                });
+
+                render.renderAll($scope);
+            }
+            else {
+                // propagate event to map
+                google.maps.event.trigger($scope.map, 'click', null);
+            }
         });
         google.maps.event.addListener(polygon, 'mouseover', function (event) {
             // Within the event listener, "this" refers to the polygon which

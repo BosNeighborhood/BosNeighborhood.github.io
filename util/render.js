@@ -2,7 +2,7 @@
 
 define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_, util, d3, Debounce) {
     // datasetType: 'crime' or '311'
-    // updateDateTimeFilter: boolean, update date/time filter charts if true
+    // updateDateTimeFilter: boolean, update date&time filter charts if true
     function render($scope, datasetType, updateDateTimeFilter) {
         return new Promise((resolve, reject) => {
             // load new data
@@ -298,7 +298,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
     }
 
     // request and render crime & 311 dataset based on type filters and
-    // neighborhood filter, update date & time filter charts
+    // region filter, update date & time filter charts
     function renderAll($scope) {
         Promise.all([
            render($scope, 'crime'),

@@ -42,6 +42,7 @@ function ($, angular, util) {
         // hover effect & fill color enabled / disabled
         $scope.enable_hover = true;
         $scope.currSelectedRegion = null;
+        $scope.regionClickDisabled = false;
         // todo: show some stats along with the types "Theft (**19 cases**)"
         $scope.crime_types = ['All'];
         $scope.service_types = ['All'];
