@@ -2,8 +2,8 @@
 
 define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_, util, d3, Debounce) {
     // datasetType: 'crime' or '311'
-    // updateDateTimeFilter: boolean, update date&time filter charts if true
-    function render($scope, datasetType, updateDateTimeFilter) {
+    // needUpdateDateTimeFilter: boolean, update date&time filter charts if true
+    function render($scope, datasetType, needUpdateDateTimeFilter) {
         return new Promise((resolve, reject) => {
             // load new data
             var filters = datasetType === "crime" ? $scope.type_filters.selected_crime_types
@@ -53,12 +53,20 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                         // received the event.   
                         var formatTime = d3.timeFormat("%a %B %d, %Y %-I%p");
                         var r = this.record;
-                        // todo: content for 311 data
-                        var content = `<b>${r.offense_code_group}</b><br />
-                        ${r.offense_description}<br />
-                        <br />
-                        ${r.street}<br />
-                        ${formatTime(new Date(r.occurred_on_date))}<br />`;
+                        var content;
+                        if (r.offense_code_group) {
+                            content = `<b>${r.offense_code_group}</b><br />
+                                        ${r.offense_description}<br />
+                                        <br />
+                                        ${r.street}<br />
+                                        ${formatTime(new Date(r.occurred_on_date))}<br />`;
+                        }
+                        else {
+                            content = `<b>${r.case_title}</b><br />
+                                        ${r.neighborhood}<br />
+                                        ${formatTime(new Date(r.occurred_on_date))}`;
+                        }
+
                         $scope.infoWindow.setContent(content);
                         $scope.infoWindow.setPosition(event.latLng);
                         $scope.infoWindow.open($scope.map);
@@ -73,7 +81,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                     $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
                 initTypeFilterOptions($scope, datasetType, data);
 
-                if (updateDateTimeFilter) {
+                if (needUpdateDateTimeFilter) {
                     updateDateTimeFilter($scope);
                 }
 
