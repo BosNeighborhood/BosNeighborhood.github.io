@@ -124,7 +124,9 @@
 
     function addEventListeners($scope, polygon) {
         var map = $scope.map,
-            region_neighborhood_ht = $scope.region_neighborhood_ht;
+            region_neighborhood_ht = $scope.region_neighborhood_ht,
+			neighborhoodInfo = $scope.neighborhoodsInfo;
+		var neighborhood = null;
         google.maps.event.addListener(polygon, 'click', function (e) {
             if (!$scope.regionClickDisabled) {
                 // make sure enable hover & remove filter region code not triggered
@@ -136,8 +138,21 @@
                 _.forOwn(region_neighborhood_ht, (value, key) => {
                     if (value.indexOf(this) !== -1) {
                         // todo: update sidebar etc.
+
+						neighborhood = neighborhoodInfo.find(function (d) {
+							return d.name === key;
+						});
+						//console.log("************************** neighborood 1: "+ neighborhood);
+
+						$scope.selectedNeighborhood = neighborhood;
+						$scope.$apply(); 
+						//window.alert("This neighborhood info is " + $scope.selectedNeighborhood.name);
+						document.getElementById("neighborhoods").className = "tab-pane fade in active";
+						document.getElementById("home").className = "tab-pane fade";
+						console.log("************************** KEY: "+ key);
                         // key is the name of the neighborhood
                         //alert(key);
+                 
                     }
                 });
                 map.setCenter(this.getBounds().getCenter());

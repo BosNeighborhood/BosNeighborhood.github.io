@@ -1,4 +1,4 @@
-﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map'], function (_, d3, UrlBuilder) {
+﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map', 'jquery','angular'], function (_, d3, UrlBuilder,$,angular) {
     if (!google.maps.Polygon.prototype.getBounds) {
         google.maps.Polygon.prototype.getBounds = function () {
             var bounds = new google.maps.LatLngBounds()
