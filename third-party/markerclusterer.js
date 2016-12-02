@@ -359,13 +359,33 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var count = markers.length;
   var dv = count;
   while (dv !== 0) {
-    dv = parseInt(dv / 10, 10);
-    index++;
+      dv = parseInt(dv / 10, 10);
+      index++;
   }
-  if (count > 1000) {
-      var prefix = count % 1000 === 0 ? '' : '>';
+  var prefix;
+  if (count >= 1000){
+      prefix = count % 1000 === 0 ? '' : '>';
       count = prefix + parseInt(count / 1000, 10).toString() + 'k';
   }
+  else if (count >= 100){
+      prefix = count % 100 === 0 ? '' : '>';
+      count = prefix + parseInt(count / 100, 10).toString() + '00';
+  }
+  else if (count >= 50){
+      prefix = count === 50 ? '' : '>';
+      count = prefix + '50';
+  }
+  else if (count >= 10){
+      prefix = count === 10 ? '' : '>';
+      count = prefix + '10';
+  }
+  else if (count >= 5){
+      prefix = count === 5 ? '' : '>';
+      count = prefix + '5';
+  }
+  else{
+      count = "<5";
+  }  
 
   index = Math.min(index, numStyles);
   return {
