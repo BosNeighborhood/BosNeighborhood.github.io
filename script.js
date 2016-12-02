@@ -28,8 +28,8 @@ require.config({
     }
 });
 
-require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min', 'bootstrap'],
-function ($, angular, util) {    
+require(['d3','jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
+function (d3, $, angular, util) {    
     var app = angular.module("BosNeighborhood", ['localytics.directives']);
     app.controller("BosNeighborhoodController", function ($scope, $timeout) {
         $scope.school_list = [];
@@ -56,7 +56,13 @@ function ($, angular, util) {
         $scope.dateScaleY = null;
         $scope.timeScaleX = null;
         $scope.timeScaleY = null;
-
+		$scope.neighborhoodsInfo = [];
+		//Ameneh
+		d3.csv("/data/NeighborhoodsInfo.csv", function(data) {
+			$scope.neighborhoodsInfo = data;
+		});
+		$scope.selectedNeighborhood = null;
+		$scope.hello = "Hello";
         $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
         $("#school-select").chosen({ placeholder_text_single: '' })
             .change(() => {
