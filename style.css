@@ -85,6 +85,11 @@ a.navbar-brand {
     /*visibility: hidden;*/
 }
 
+.filter-bottom svg {
+    width: 300px;
+    height: 200px;
+}
+
 #crime_type_filter_chosen, #crime-filter select {
     outline: 2px solid orange;
     margin-right: 4px;

@@ -35,7 +35,7 @@ function ($, angular, util) {
         $scope.school_list = [];
         $scope.school = { selected: null };
         $scope.school_marker = null;
-        $scope.closeModal = () => Avgrund.hide();
+        $scope.closeModal = () => { Avgrund.hide(); util.featureIntroduction('Dec2016'); };
         $scope.map = null;
         $scope.prevZoomLevel = 11;
         $scope.markers = {};
