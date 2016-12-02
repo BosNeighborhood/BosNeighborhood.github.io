@@ -38,10 +38,10 @@
                                 map: map,
                                 paths: _.map(polygon, point => new google.maps.LatLng(+point[1], +point[0])),
                                 // todo: style
-                                strokeColor: '#ff0000',
+                                strokeColor: '#ff8080',
                                 strokeOpacity: 0.8,
                                 strokeWeight: 2,
-                                fillColor: '#ff0000',
+                                fillColor: '#ff8080',
                                 fillOpacity: 0.5
                             });
                             if (!_.has(region_neighborhood_ht, neighborhood.properties.Name)) {

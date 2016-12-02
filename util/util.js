@@ -1,4 +1,4 @@
-﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map'], function (_, d3, UrlBuilder) {
+﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map', 'jquery','angular'], function (_, d3, UrlBuilder,$,angular) {
     if (!google.maps.Polygon.prototype.getBounds) {
         google.maps.Polygon.prototype.getBounds = function () {
             var bounds = new google.maps.LatLngBounds()
@@ -77,21 +77,40 @@
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
             .get(callback);
     }
-
+	function findNeighborhood (name){
+		return key;
+		
+	}
     function addEventListeners($scope, polygon) {
         var map = $scope.map, 
-            region_neighborhood_ht = $scope.region_neighborhood_ht;
+            region_neighborhood_ht = $scope.region_neighborhood_ht,
+			neighborhoodInfo = $scope.neighborhoodsInfo;
+		var neighborhood = null;	
         google.maps.event.addListener(polygon, 'click', function (event) {
             // make sure enable hover & remove filter region code not triggered
             $scope.prevZoomLevel = 0;
             $scope.currSelectedRegion = this;
             _.forOwn(region_neighborhood_ht, (value, key) => {
                 if (value.indexOf(this) !== -1) {
+					//var name = $.grep(neighborhoodInfo[0].name, function(e){ return e.name === key; });
+					 neighborhood = neighborhoodInfo.find(function (d) {
+						return d.name === key;
+					});
+					console.log("NNNNNNNNNNNNNNNeighborhood "+ neighborhood);
+					$scope.selectedNeighborhood = neighborhood;
+					$scope.$apply(); 
+					window.alert("This neighborhood info is " + $scope.selectedNeighborhood.name);
+
+					document.getElementById("neighborhoods").className = "tab-pane fade in active";
+					document.getElementById("home").className = "tab-pane fade";
+					
+
                     // todo: update sidebar etc.
                     // key is the name of the neighborhood
                     //alert(key);
                 }
             });
+
             map.setCenter(this.getBounds().getCenter());
             map.setZoom(getZoomByBounds(map, this.getBounds()));
             // only show records within current neighborhood            
@@ -109,18 +128,19 @@
             });
             $scope.$emit('renderDateTimeFilter');
         });
+
         google.maps.event.addListener(polygon, 'mouseover', function (event) {
             // Within the event listener, "this" refers to the polygon which
             // received the event.
             this.setOptions({
-                strokeColor: '#00ff00',
-                fillColor: '#00ff00'
+                strokeColor: '#b3ffb3',
+                fillColor: '#ccffcc'
             });
         });
         google.maps.event.addListener(polygon, 'mouseout', function (event) {
             this.setOptions({
-                strokeColor: '#ff0000',
-                fillColor: '#ff0000'
+                strokeColor: '#ff8080',
+                fillColor: '#ff8080'
             });
         });        
     }
