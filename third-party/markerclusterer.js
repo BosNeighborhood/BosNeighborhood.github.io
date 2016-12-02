@@ -362,6 +362,10 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     dv = parseInt(dv / 10, 10);
     index++;
   }
+  if (count > 1000) {
+      var prefix = count % 1000 === 0 ? '' : '>';
+      count = prefix + parseInt(count / 1000, 10).toString() + 'k';
+  }
 
   index = Math.min(index, numStyles);
   return {
