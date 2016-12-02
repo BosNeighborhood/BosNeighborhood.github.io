@@ -24,8 +24,8 @@ require.config({
     }
 });
 
-require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
-function ($, angular, util) {    
+require(['d3','jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
+function (d3, $, angular, util) {    
     var app = angular.module("BosNeighborhood", ['localytics.directives']);
     app.controller("BosNeighborhoodController", function ($scope, $timeout) {
         $scope.school_list = [];
@@ -51,7 +51,24 @@ function ($, angular, util) {
         $scope.dateScaleY = null;
         $scope.timeScaleX = null;
         $scope.timeScaleY = null;
-
+		$scope.neighborhoodsInfo = [];
+		//Ameneh
+		d3.csv("/data/NeighborhoodsInfo.csv", function(data) {
+			$scope.neighborhoodsInfo = data;
+		});
+		/*$scope.neighborhoodsInfo =  [ { name: "Allston", img: "https://farm1.staticflickr.com/499/19333879574_b22dfdfdce_o.jpg" , hometo:"Home to: Harvard Avenue, Commonwealth Avenue, and Brighton Avenue. Neighbors: Mostly college students, many immigrants and young professionals",
+		desc:"Description: Allston is close to many colleges and universities in and around the City, so it’s know for its student population. In recent years, many immigrants and young professionals have also moved to the area. This mix of people makes Allston one of the most diverse neighborhoods in Boston. You can find ethnic restaurants and popular watering holes on main streets."}, 
+            { name: "Back Bay", img: "http://www.inetours.com/Photographs/images/Boston/PCSO-Back-Bay_8601.jpg", hometo:"Home to: Boston Public Library, Newbury Street, Prudential Center, Boston Public GardenNeighbors: Mostly professionals and some students",
+		desc:"Once water behind the Public Garden, the Back Bay now holds some of the most exclusive real estate in Boston, diverse and trendy shopping on Newbury Street, and elegant historic brownstone architecture. Back Bay is an exciting place to live that does come with higher rents!"},
+		{name:"Bay Village"},
+		{name:"Beacon Hill"},
+		{name:"Brighton"},
+		{name:"Charlestown"},
+		{name:"Chinatown-Leather District"},
+		{name:"Dorchester"},
+		{name: "Downtown"}];*/
+		$scope.selectedNeighborhood = null;
+		$scope.hello = "Hello";
         $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
         $("#school-select").chosen({ placeholder_text_single: '' })
             .change(() => {
