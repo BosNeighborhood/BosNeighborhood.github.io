@@ -12,7 +12,8 @@ require.config({
         util: '../util',
         google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ&libraries=geometry',
         angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min',
-        jquery: 'jquery-3.1.1.min'
+        jquery: 'jquery-3.1.1.min',
+        bootstrap: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min'
     },
     shim: {
         angular: {
@@ -20,11 +21,14 @@ require.config({
         },        
         'chosen/angular-chosen.min': {
             deps: ['jquery', 'angular', 'chosen/chosen.jquery']
+        },
+        bootstrap: {
+            deps: ['jquery']
         }
     }
 });
 
-require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min'],
+require(['jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min', 'bootstrap'],
 function ($, angular, util) {    
     var app = angular.module("BosNeighborhood", ['localytics.directives']);
     app.controller("BosNeighborhoodController", function ($scope, $timeout) {
