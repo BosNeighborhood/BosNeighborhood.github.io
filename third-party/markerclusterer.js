@@ -642,14 +642,20 @@ MarkerClusterer.prototype.getExtendedBounds = function(bounds) {
   var bl = new google.maps.LatLng(bounds.getSouthWest().lat(),
       bounds.getSouthWest().lng());
 
+  // display more clusters in far view
+  var gridSize = this.gridSize_;
+  if (this.map_.getZoom() <= 11) {
+      gridSize = parseInt(this.gridSize_ / 1.5, 10);
+  }
+
   // Convert the points to pixels and the extend out by the grid size.
   var trPix = projection.fromLatLngToDivPixel(tr);
-  trPix.x += this.gridSize_;
-  trPix.y -= this.gridSize_;
+  trPix.x += gridSize;
+  trPix.y -= gridSize;
 
   var blPix = projection.fromLatLngToDivPixel(bl);
-  blPix.x -= this.gridSize_;
-  blPix.y += this.gridSize_;
+  blPix.x -= gridSize;
+  blPix.y += gridSize;
 
   // Convert the pixel points back to LatLng
   var ne = projection.fromDivPixelToLatLng(trPix);
