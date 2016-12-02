@@ -41,8 +41,16 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                         var visible = $scope.currSelectedRegion 
                                         ? google.maps.geometry.poly.containsLocation(new google.maps.LatLng(+record.lat, +record.long), $scope.currSelectedRegion)
                                         : true;
+                        var type = datasetType === 'crime' ? record.offense_code_group
+                                                           : record.subject;
+                        var lookup = {
+                            crime: ['Firearm Violations', 'Larceny', 'Missing Person Reported', 'Motor Vehicle Accident Response', 'Robbery'],
+                            311: ['Inspectional Servies', 'Parks & Recreation Department', 'Property Management', 'Public Works Department', 'Transportation - Traffic Division']
+                        };
+                        var iconUrl = `data/img/${datasetType}/${_.indexOf(lookup[datasetType], type) === -1 ? 'Others' : type}.png`;
                         return new google.maps.Marker({
                             position: { lat: +record.lat, lng: +record.long },
+                            icon: iconUrl,
                             visible: visible,
                             record: record
                         })
