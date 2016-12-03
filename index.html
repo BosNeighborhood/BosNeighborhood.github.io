@@ -42,7 +42,7 @@
             <div class="col-md-4 navigation">
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active"><a data-toggle="tab" href="#home">Introduction</a></li>
-                    <li><a data-toggle="tab" href="#neighborhoods">Neighborhoods</a></li>
+                    <li class="disabled"><a data-toggle="tab" href="#neighborhoods">Neighborhoods</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
@@ -67,24 +67,21 @@
                         </div>
                     </div>
                     <div id="neighborhoods" class="tab-pane fade">
-                        <!-- search box
-    <div class="container-fluid">
-        <div class="row">
-                   <div id="custom-search-input">
-                        <div class="input-group col-sm-12">
-                            <input type="text" class="  search-query form-control" placeholder="Search" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-danger" type="button">
-                                    <span class=" glyphicon glyphicon-search"></span>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-        </div>
-    </div>
-    -->
-
-                        <br />
+                        <!-- search box -->
+                        <!--<div class="container-fluid">
+                            <div class="row">
+                                <div id="custom-search-input">
+                                    <div class="input-group col-sm-12">
+                                        <input type="text" class=" search-query form-control" placeholder="Search" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="button">
+                                                <span class=" glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
                         <div class="beveled-media-box img-overlay" style="background-image:url('{{selectedNeighborhood.img}}');">
                             <div class="center panel-padding">
                                 <h3>{{selectedNeighborhood.name}}</h3>

@@ -140,7 +140,8 @@
 						neighborhood = neighborhoodInfo.find(d => d.name === key);
 						$scope.selectedNeighborhood = neighborhood;
 						$scope.$apply();
-						document.getElementById("neighborhoods").className = "tab-pane fade in active";
+						$(".nav-tabs li:last-child").removeClass('disabled').tab('show');
+                        document.getElementById("neighborhoods").className = "tab-pane fade in active";
 						document.getElementById("home").className = "tab-pane fade";
 						console.log("neighborhood selected: " + key);
                     }
