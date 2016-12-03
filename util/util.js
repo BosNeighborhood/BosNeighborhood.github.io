@@ -1,4 +1,4 @@
-﻿define(['lodash', 'd3', 'util/UrlBuilder', 'google_map', 'jquery','angular'], function (_, d3, UrlBuilder,$,angular) {
+﻿define(['jquery', 'lodash', 'd3', 'util/UrlBuilder', 'google_map'], function ($, _, d3, UrlBuilder) {
     if (!google.maps.Polygon.prototype.getBounds) {
         google.maps.Polygon.prototype.getBounds = function () {
             var bounds = new google.maps.LatLngBounds()
@@ -42,7 +42,7 @@
             return;
         }
         // todo: allow unlimited # of records?
-        var urlBuilder = new UrlBuilder(datasetType).limit(5000);
+        var urlBuilder = new UrlBuilder(datasetType).limit(2000);
         if (datasetType === '311') {
             // remove data before Aug 2015 since no crime data for that time period is available
             urlBuilder.addCmpFilter("open_dt", ">", new Date(2015, 7, 1));
@@ -56,7 +56,7 @@
         _.forOwn(dateTimeFilters, (extent, type) => {
             // todo: filter 311 time manually
             var lookup = {
-                crime: {date: 'occurred_on_date', time: 'hour'},
+                crime: { date: 'occurred_on_date', time: 'hour' },
                 311: { date: 'open_dt', time: null }
             };
             var column = lookup[datasetType][type];
@@ -75,8 +75,8 @@
         });
         if (latLngBounds) {
             var lookup = {
-                crime: {lat: 'lat', lng: 'long'},
-                311: {lat: 'latitude', lng: 'longitude'}
+                crime: { lat: 'lat', lng: 'long' },
+                311: { lat: 'latitude', lng: 'longitude' }
             };
             urlBuilder.addCmpFilter(lookup[datasetType].lat, '>=', latLngBounds.getSouthWest().lat());
             urlBuilder.addCmpFilter(lookup[datasetType].lat, '<=', latLngBounds.getNorthEast().lat());
@@ -86,7 +86,7 @@
         d3.request(urlBuilder.url)
             .header("X-App-Token", "fa90xHwTH31A8h1WQfskk38cb")
             .get(callback);
-    }    
+    }
 
     return {
         getZoomByBounds: getZoomByBounds,

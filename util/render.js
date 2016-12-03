@@ -226,7 +226,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
     }
 
     function initBrush($scope) {
-        var svg = d3.select(".filter-bottom");
+        var svg = d3.select(".filter-bottom svg");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
             margin = 20;

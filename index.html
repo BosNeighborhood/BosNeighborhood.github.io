@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Under the Skin of the City</title>
@@ -24,7 +24,6 @@
             </ul>
         </div>
     </nav>
-
     <div class="container-fluid">
         <div class="filter-top">
             <span id="crime-filter">
@@ -68,31 +67,32 @@
                         </div>
                     </div>
                     <div id="neighborhoods" class="tab-pane fade">
-                     <!-- search box
-						<div class="container-fluid">
-							<div class="row">
-									   <div id="custom-search-input">
-											<div class="input-group col-sm-12">
-												<input type="text" class="  search-query form-control" placeholder="Search" />
-												<span class="input-group-btn">
-													<button class="btn btn-danger" type="button">
-														<span class=" glyphicon glyphicon-search"></span>
-													</button>
-												</span>
-											</div>
-										</div>
-							</div>
-						</div>
-						-->
+                        <!-- search box
+    <div class="container-fluid">
+        <div class="row">
+                   <div id="custom-search-input">
+                        <div class="input-group col-sm-12">
+                            <input type="text" class="  search-query form-control" placeholder="Search" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button">
+                                    <span class=" glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+        </div>
+    </div>
+    -->
+
                         <br />
-						<div class="beveled-media-box img-overlay" style="background-image:url('{{selectedNeighborhood.img}}');">
-						  <div class="center panel-padding">
-							<h3>{{selectedNeighborhood.name}}</h3>
-							<p>It's all in Allston-(Brighton)</p>
-						  </div>
-						</div>
+                        <div class="beveled-media-box img-overlay" style="background-image:url('{{selectedNeighborhood.img}}');">
+                            <div class="center panel-padding">
+                                <h3>{{selectedNeighborhood.name}}</h3>
+                                <p>It's all in Allston-(Brighton)</p>
+                            </div>
+                        </div>
                         <div class="desc">
-						 <div  class="container-fluid">
+                            <div class="container-fluid">
                                 <h1>Decsription</h1>
                                 <p>
                                     {{selectedNeighborhood.desc}}
@@ -109,8 +109,8 @@
                                     </div>
                                     <div id="collapse1" class="panel-collapse collapse in">
                                         <div class="panel-body">
-											<p>{{selectedNeighborhood.hometo}}</p>
-										</div>
+                                            <p>{{selectedNeighborhood.hometo}}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
@@ -122,9 +122,10 @@
                                         </h4>
                                     </div>
                                     <div id="collapse2" class="panel-collapse collapse">
-                                        <div class="panel-body">Chart
-											<svg></svg>
-										</div>
+                                        <div class="panel-body">
+                                            Chart
+                                            <svg></svg>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
@@ -139,7 +140,7 @@
                                         <div class="panel-body" id="neighb-commute">
                                             1 mile
                                             T Access: Green line (B,C, D & E lines), orange line, many buses.
-											15-20 minute walk or a 10 minute subway ride.
+                                            15-20 minute walk or a 10 minute subway ride.
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +150,7 @@
                 </div>
             </div>
         </div>
-        <div class="filter-bottom"></div>
+        <div class="filter-bottom"><svg></svg></div>
     </div>
     <aside id="school-selector" class="avgrund-popup">
         <div class="row">
@@ -168,7 +169,6 @@
         </div>
     </aside>
     <script src="third-party/jquery-3.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script data-main="script.js" src="third-party/require.js"></script>
 </body>
 </html>

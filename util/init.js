@@ -69,7 +69,6 @@
                             var region = new google.maps.Polygon({
                                 map: map,
                                 paths: _.map(polygon, point => new google.maps.LatLng(+point[1], +point[0])),
-                                // todo: style
                                 strokeColor: '#ff8080',
                                 strokeOpacity: 0.8,
                                 strokeWeight: 2,
@@ -137,22 +136,13 @@
                 $scope.currSelectedRegion = this;
                 _.forOwn(region_neighborhood_ht, (value, key) => {
                     if (value.indexOf(this) !== -1) {
-                        // todo: update sidebar etc.
-
-						neighborhood = neighborhoodInfo.find(function (d) {
-							return d.name === key;
-						});
-						//console.log("************************** neighborood 1: "+ neighborhood);
-
+                        // key is the name of the neighborhood
+						neighborhood = neighborhoodInfo.find(d => d.name === key);
 						$scope.selectedNeighborhood = neighborhood;
-						$scope.$apply(); 
-						//window.alert("This neighborhood info is " + $scope.selectedNeighborhood.name);
+						$scope.$apply();
 						document.getElementById("neighborhoods").className = "tab-pane fade in active";
 						document.getElementById("home").className = "tab-pane fade";
-						console.log("************************** KEY: "+ key);
-                        // key is the name of the neighborhood
-                        //alert(key);
-                 
+						console.log("neighborhood selected: " + key);
                     }
                 });
                 map.setCenter(this.getBounds().getCenter());
@@ -190,7 +180,7 @@
     }
 
     function initDateTimeFilter() {
-        var svg = d3.select(".filter-bottom").append("svg");
+        var svg = d3.select(".filter-bottom svg");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
             margin = 20;        
