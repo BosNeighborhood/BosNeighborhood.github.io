@@ -256,7 +256,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
             // if brush cleared
             if (!d3.event.selection) {
                 var filterType = d3.select(this).attr("class").split('-').pop();
-                eventSelection[filterType] = d3.event.selection.slice();
+                eventSelection[filterType] = [0, width - margin];
                 Debounce.observed(filterType, $scope);
             }
         }
@@ -268,10 +268,10 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                 selection = eventSelection[filterType];
             if (!selection) {
                 // brush cleared, select all
-                selection = [0, width];
+                selection = [0, width - margin];
             }
             var extent = selection.map(scale.invert);
-            if (filterType === 'time') extent = extent.map(Math.round);
+            if (filterType === 'time') extent = extent.map(Math.floor);
             else extent = extent.map(d3.timeMonth.floor)
 
             if ($scope.currDateTimeFilterExtent[filterType] && +$scope.currDateTimeFilterExtent[filterType][0] == +extent[0] && +$scope.currDateTimeFilterExtent[filterType][1] == +extent[1])
@@ -283,16 +283,23 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                 render($scope, 'crime'),
                 render($scope, '311')
             ]).then(() => {
-                // only update filters other than this one
-                if (filterType === 'time') {
-                    updateTimeFilterStyle(extent);
-                    renderDateFilter($scope);
-                } else {
-                    updateDateFilterStyle(extent);
+                // only update filter chart other than this one
+                if (filterType === 'date') {
                     renderTimeFilter($scope);
+                    updateDateFilterStyle(extent);
+                    if (!$scope.currDateTimeFilterExtent['time'])
+                        $scope.currDateTimeFilterExtent['time'] = [0, width - margin].map($scope.timeScaleX.invert).map(Math.floor);
+                    updateTimeFilterStyle($scope.currDateTimeFilterExtent['time']);
+                }
+                else {
+                    renderDateFilter($scope);
+                    if (!$scope.currDateTimeFilterExtent['date'])
+                        $scope.currDateTimeFilterExtent['date'] = [0, width - margin].map($scope.dateScaleX.invert).map(d3.timeMonth.floor);
+                    updateDateFilterStyle($scope.currDateTimeFilterExtent['date']);
+                    updateTimeFilterStyle(extent);                    
                 }
             });
-        }
+            }
     }
 
     function updateDateFilterStyle(extent) {
