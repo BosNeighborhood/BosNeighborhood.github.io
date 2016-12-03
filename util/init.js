@@ -49,6 +49,9 @@
 
                     // enable click event on all regions
                     $scope.regionClickDisabled = false;
+                    // switch back to introduction tab
+                    document.getElementById("home").className = "tab-pane fade in active";
+                    document.getElementById("neighborhoods").className = "tab-pane fade";
                     // remove neighborhood filter if any
                     if ($scope.currSelectedRegion) {
                         $scope.currSelectedRegion = null;
@@ -140,7 +143,7 @@
 						neighborhood = neighborhoodInfo.find(d => d.name === key);
 						$scope.selectedNeighborhood = neighborhood;
 						$scope.$apply();
-						$(".nav-tabs li:last-child").removeClass('disabled').tab('show');
+						$(".nav-tabs li:last-child").removeClass('disabled');
                         document.getElementById("neighborhoods").className = "tab-pane fade in active";
 						document.getElementById("home").className = "tab-pane fade";
 						console.log("neighborhood selected: " + key);

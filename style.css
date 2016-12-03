@@ -232,6 +232,8 @@ button {
 .beveled-media-box {
     background-size: cover;
     background-position: center center;
+    background-color: #bcbcbc;
+    background-blend-mode: multiply;
     height: 200px;
     width: 100%;
     display: inline-block;
@@ -252,15 +254,4 @@ button {
     color: #ffffff;
     font-size: 24px;
     z-index: 1;
-}
-
-.img-overlay::before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    /* background-color: rgba(0,0,0,0.3);*/
-    content: "";
-    z-index: 0;
 }
