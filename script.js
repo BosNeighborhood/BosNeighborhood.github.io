@@ -69,11 +69,15 @@ function (d3, $, angular, util) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             var school_lat = +results[0].geometry.location.lat(),
                                 school_lng = +results[0].geometry.location.lng();
+				var image = 'data/img/school.png';	
                             $scope.school_marker = new google.maps.Marker({
                                 position: { lat: school_lat, lng: school_lng },
                                 label: $scope.school.selected,
-                                map: $scope.map
+                                map: $scope.map,
+				icon: image
                             });
+				$scope.map.setZoom(13);
+				$scope.map.panTo($scope.school_marker.position);
                         }
                     });
                 });
