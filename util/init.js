@@ -17,17 +17,20 @@
                 google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
                     $(".filter-top").css("visibility", "initial").hide().fadeIn(600);                    
                 });
-                map.fitBounds(results[0].geometry.bounds);
+                var bounds = shrinkBounds(results[0].geometry.bounds);
+                map.fitBounds(bounds);
                 // trigered on every change of viewport
                 // todo: limit zoom/pan level/area cannot move outside bos
                 // this is not currently used
-                //google.maps.event.addListener(map, 'idle', () => {
-                //    var bounds = map.getBounds();
-                //    var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-                //    var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-                //    var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-                //    var se = new google.maps.LatLng(sw.lat(), ne.lng());
-                //});
+                google.maps.event.addListener(map, 'idle', () => {
+                    var bounds = map.getBounds();
+                    var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+                    var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+                    var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+                    var se = new google.maps.LatLng(sw.lat(), ne.lng());
+                    console.log("ne: " + ne.lat() + ' ' + ne.lng());
+                    console.log("sw: " + sw.lat() + ' ' + sw.lng());
+                });
                 google.maps.event.addListener(map, 'click', (e) => {
                     // deal with strange behavior that the first click on polygon
                     // after pageload / render will go to handler on map not the polygon
@@ -194,7 +197,18 @@
         svg.append("g").attr("class", "time-filter")
                        .append("g").attr("class", "axis")
                             .attr("transform", "translate(0," + (height - margin) + ")");        
-    }    
+    }
+
+    function shrinkBounds(bounds) {
+        var ne = bounds.getNorthEast(),
+            sw = bounds.getSouthWest(),
+            diff = sw.lat() - ne.lat();
+        ne = new google.maps.LatLng(ne.lat() - diff / 4, ne.lng());
+        sw = new google.maps.LatLng(sw.lat() + diff / 4, sw.lng());
+        //ne = new google.maps.LatLng(42.444258625337405, -70.76875354345702);
+        //sw = new google.maps.LatLng(42.30476139859287, -71.38604785498046);
+        return new google.maps.LatLngBounds(sw, ne);
+    }
 
     return {
         initMap: initMap
