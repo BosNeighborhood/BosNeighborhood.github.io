@@ -19,8 +19,9 @@
 
 #top-header {
     position: relative;
-    padding: 0px 15px 0px 15px;
+    padding: 10px 15px 0px 15px;
     color: #ececf9;
+	height:50px;
     text-align: center;
     text-shadow: 0 1px 0 rgba(0,0,0,.1);
     background-color: #333399;
@@ -32,6 +33,7 @@
     background-repeat: repeat-x;
 }
 
+
 .navigation {
     height: calc(100vh - 72px);
     outline: 1px solid #e6e6ff;
@@ -42,26 +44,19 @@
 .navbar-inverse {
     margin-bottom: 0px;
     border-radius: 0px;
+	height: 50px;
 }
 
 .no-margin {
     margin: 4px !important;
 }
 
-a.navbar-brand {
+.navbar-header{
     color: #ffffff;
     font-size: 1.500em;
-    text-transform: uppercase;
-    height: 70px;
-    font-family: 'jaapokki_enchanceregular';
+    font-family: Georgia, Times, "Times New Roman", serif;
 }
 
-    a.navbar-brand small {
-        display: block;
-        font-size: 0.650em;
-        font-family: 'Century Gothic';
-        text-transform: capitalize;
-    }
 
 .navbar-form {
     width: 100%;
@@ -69,11 +64,9 @@ a.navbar-brand {
 
 .filter-top {
     position: absolute;
-    //top: 74px;
-    //left: 0px;
+    top: 55px; /*105*/
+    left: 5px; /*10% */
     margin: auto;
-    left: 10%;
-    top: 105;
     z-index: 1;
     visibility: hidden;
 }
@@ -81,13 +74,13 @@ a.navbar-brand {
 .filter-bottom {
     position: absolute;
     bottom: 10px;
-    left: 40%;
+	left: 5px;
     width: 300px;
     height: 200px;
     z-index: 1;
     background-color: white;
     opacity: 0.7;
-    padding: 2px;
+    padding: 3px;
     /*todo: load sequence*/
     /*visibility: hidden;*/
 }
