@@ -75,10 +75,10 @@
                             var region = new google.maps.Polygon({
                                 map: map,
                                 paths: _.map(polygon, point => new google.maps.LatLng(+point[1], +point[0])),
-                                strokeColor: '#ff8080',
-                                strokeOpacity: 0.8,
-                                strokeWeight: 2,
-                                fillColor: '#ff8080',
+                                strokeColor: '#666',
+                                strokeOpacity: 0.5,
+                                strokeWeight: 1,
+                                fillColor: '#888',
                                 fillOpacity: 0.5
                             });
                             if (!_.has(region_neighborhood_ht, neighborhood.properties.Name)) {
@@ -174,14 +174,14 @@
             // Within the event listener, "this" refers to the polygon which
             // received the event.
             this.setOptions({
-                strokeColor: '#b3ffb3',
-                fillColor: '#ccffcc'
+                strokeColor: '#333',
+                fillColor: '#333'
             });
         });
         google.maps.event.addListener(polygon, 'mouseout', function (event) {
             this.setOptions({
-                strokeColor: '#ff8080',
-                fillColor: '#ff8080'
+                strokeColor: '#666',
+                fillColor: '#888'
             });
         });
     }
