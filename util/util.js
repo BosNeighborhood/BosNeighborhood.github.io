@@ -149,6 +149,7 @@
 		        toTab.addClass("active is-entering")
 		        .on('animationend', () => {
 		            toTab.removeClass("is-entering").off('animationend');
+		            $('body').trigger("tabAnimationEnd");
 		        });
 		    });;
     }
