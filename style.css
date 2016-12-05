@@ -2,7 +2,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Lato', Helvetica, sans-serif;
+    font-family: 'Hind', sans-serif;
     font-size: 16px;
     color: #222;
 }
@@ -24,11 +24,11 @@
 	height:50px;
     text-align: center;
     text-shadow: 0 1px 0 rgba(0,0,0,.1);
-    background-color: #333399;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#563d7c),to(#333399));
+    background-color: #333;
+/*     background-image: -webkit-gradient(linear,left top,left bottom,from(#563d7c),to(#333399));
     background-image: -webkit-linear-gradient(top,#563d7c 0,#333399 100%);
     background-image: -o-linear-gradient(top,#563d7c 0,#333399 100%);
-    background-image: linear-gradient(to bottom,#563d7c 0,#333399 100%);
+    background-image: linear-gradient(to bottom,#563d7c 0,#333399 100%); */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#563d7c', endColorstr='#333399', GradientType=0);
     background-repeat: repeat-x;
 }
@@ -53,8 +53,11 @@
 
 .navbar-header{
     color: #ffffff;
-    font-size: 1.500em;
-    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 1.200em;
+    height: 70px;
+    font-family: 'Lobster', cursive;
+    text-transform: capitalize;
+    font-weight: bold;
 }
 
 
@@ -91,13 +94,13 @@
     }
 
 #crime_type_filter_chosen, #crime-filter select {
-    outline: 2px solid orange;
+    outline: 2px solid #FAA41A;
     margin-right: 4px;
     width: 250px;
 }
 
 #service_type_filter_chosen, #service-filter select {
-    outline: 2px solid blue;
+    outline: 2px solid #449FD7;
     margin-left: 4px;
     width: 250px;
 }
@@ -117,7 +120,7 @@ select[id='school-select'] {
 
 h1,
 h2 {
-    font-size: 24px;
+    font-size: 22px;
     margin: 0;
     padding: 0;
 }
