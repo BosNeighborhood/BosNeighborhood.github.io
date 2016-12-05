@@ -61,7 +61,9 @@
                         _.forOwn($scope.region_neighborhood_ht, value => {
                             _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
                         });
-                        render.renderAll($scope);
+                        $("body").on('tabAnimationEnd', function () {
+                            render.renderAll($scope);
+                        });
                     }
                 });
                 // load neighborhood borders as polygons
@@ -157,7 +159,9 @@
                     _.forEach(value, region => { if (region !== this) region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }) });
                 });
 
-                render.renderAll($scope);
+                $("body").on('tabAnimationEnd', function () {
+                    render.renderAll($scope);
+                });
             }
             else {                
                 // propagate event to map if not clicking selected region

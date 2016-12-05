@@ -276,11 +276,11 @@ button {
     /* animation: name duration timing-function delay 
                   iteration-count direction fill-mode 
                   play-state */    
-    animation: exit 700ms ease-in-out;
+    animation: exit 400ms ease-in-out;
     animation-iteration-count: 1;
 }
 
 .tab-pane.is-entering {
-    animation: enter 700ms ease-in-out;
+    animation: enter 400ms ease-in-out;
     animation-iteration-count: 1;
 }
