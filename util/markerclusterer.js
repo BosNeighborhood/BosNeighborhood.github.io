@@ -1,3 +1,10 @@
+// customized for 'Under the Skin of the City' project
+// assume markers have datasetType attribute which value could be 'crime' | '311'
+// assume icons for the two datasetTypes are located in */crime/* and */311/*
+// other than 'crime' and '311' all other parts in the path are the same
+// for each cluster display two icons side by side for each datasetType
+// numbers are shortend, e.g. 5437 => '>5k', see calculator_ for details
+
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3.js
