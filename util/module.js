@@ -2,6 +2,7 @@
     return {
         getZoomByBounds: util.getZoomByBounds,
         requestData: util.requestData,
+        switchTab: util.switchTab,
 
         initMap: init.initMap,
 

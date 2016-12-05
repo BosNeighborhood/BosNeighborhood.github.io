@@ -53,8 +53,7 @@
                     // enable click event on all regions
                     $scope.regionClickDisabled = false;
                     // switch back to introduction tab
-                    document.getElementById("home").className = "tab-pane fade in active";
-                    document.getElementById("neighborhoods").className = "tab-pane fade";
+                    util.switchTab($("#neighborhoods"), $("#home"));
                     // remove neighborhood filter if any
                     if ($scope.currSelectedRegion) {
                         $scope.currSelectedRegion = null;
@@ -147,8 +146,7 @@
 						$scope.selectedNeighborhood = neighborhood;
 						$scope.$apply();
 						$(".nav-tabs li:last-child").removeClass('disabled');
-                        document.getElementById("neighborhoods").className = "tab-pane fade in active";
-						document.getElementById("home").className = "tab-pane fade";
+						util.switchTab($("#home"), $("#neighborhoods"));
 						console.log("neighborhood selected: " + key);
                     }
                 });

@@ -99,7 +99,18 @@ function (d3, $, angular, util) {
                     //console.log($scope.type_filters.selected_service_types);
                     util.render($scope, '311', true/*updateDateTimeFilter*/);
                 });
-            });        
+            });
+
+        $(".nav-tabs li").on('click', function (e) {
+            // don't trigger event handlers defined elsewhere
+            e.stopPropagation();
+            if ($(this).hasClass('disabled')) return;
+            if (!$(this).hasClass('active')) {
+                var thisTab = $($(this).attr('tab')),
+                    thatTab = $($(this).siblings().attr('tab'));
+                util.switchTab(thatTab, thisTab);
+            }
+        });
 
         util.initMap($scope);
 

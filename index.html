@@ -4,8 +4,7 @@
     <title>Under the Skin of the City</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Hind|Lobster" rel="stylesheet">
     <link rel="stylesheet" href="third-party/chosen/chosen.min.css" />
     <link rel="stylesheet" href="third-party/avgrund/avgrund.css" />
@@ -42,11 +41,11 @@
             <div class="col-md-8" id="map"></div>
             <div class="col-md-4 navigation">
                 <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a data-toggle="tab" href="#home">Introduction</a></li>
-                    <li class="disabled"><a data-toggle="tab" href="#neighborhoods">Neighborhoods</a></li>
+                    <li class="active" tab="#home"><a data-toggle="tab" href="#home">Introduction</a></li>
+                    <li class="disabled" tab="#neighborhoods"><a data-toggle="tab" href="#neighborhoods">Neighborhoods</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div id="home" class="tab-pane fade in active">
+                    <div id="home" class="tab-pane active">
                         <div data-spy="scroll" data-target=".tab-content" data-offset="50">
                             <div id="section1" class="container-fluid">
                                 <h1>Introduction</h1>
@@ -67,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="neighborhoods" class="tab-pane fade">
+                    <div id="neighborhoods" class="tab-pane">
                         <!--todo: some of the images are using http protocal which will generate warning. replace with https links-->
                         <div class="beveled-media-box img-overlay" style="background-image:url('{{selectedNeighborhood.img}}');">
                             <div class="center panel-padding">

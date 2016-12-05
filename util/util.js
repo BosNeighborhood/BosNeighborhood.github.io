@@ -42,7 +42,7 @@
             return;
         }
         // todo: allow unlimited # of records?
-        var urlBuilder = new UrlBuilder(datasetType).limit(2000);
+        var urlBuilder = new UrlBuilder(datasetType).limit(20);
         if (datasetType === '311') {
             // remove data before Aug 2015 since no crime data for that time period is available
             urlBuilder.addCmpFilter("open_dt", ">", new Date(2015, 7, 1));
@@ -88,8 +88,32 @@
             .get(callback);
     }
 
+    // fromTab, toTab: jQuery object
+    // ref: https://allurewebsolutions.com/blog/slide-transitions-bootstrap-tabs-using-css3-jquery
+    function switchTab(fromTab, toTab) {        
+        if (!fromTab.is(toTab) && toTab.hasClass("active")) {
+            // todo: angular's html update will be faster than this animation
+            //return switchTab(toTab, toTab);
+            return;            
+        }
+        var fromLi = $(`.nav-tabs li[tab="#${fromTab.attr("id")}"]`),
+            toLi = $(`.nav-tabs li[tab="#${toTab.attr("id")}"]`);
+        fromTab
+            .addClass("is-exiting")
+		    .on('animationend', () => {
+		        fromTab.removeClass("active is-exiting").off('animationend');
+		        fromLi.removeClass("active");
+		        toLi.addClass("active");
+		        toTab.addClass("active is-entering")
+		        .on('animationend', () => {
+		            toTab.removeClass("is-entering").off('animationend');
+		        });
+		    });;
+    }
+
     return {
         getZoomByBounds: getZoomByBounds,
         requestData: requestData,
+        switchTab: switchTab
     };
 });
