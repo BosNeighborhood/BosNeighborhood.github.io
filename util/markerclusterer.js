@@ -641,12 +641,12 @@ MarkerClusterer.prototype.getExtendedBounds = function(bounds) {
       bounds.getNorthEast().lng());
   var bl = new google.maps.LatLng(bounds.getSouthWest().lat(),
       bounds.getSouthWest().lng());
-
-  // display more clusters in far view
+  
   var gridSize = this.gridSize_;
-  if (this.map_.getZoom() <= 11) {
-      gridSize = parseInt(this.gridSize_ / 1.5, 10);
-  }
+  // display more clusters in far view
+  //if (this.map_.getZoom() <= 11) {
+  //    gridSize = parseInt(this.gridSize_ / 1.5, 10);
+  //}
 
   // Convert the points to pixels and the extend out by the grid size.
   var trPix = projection.fromLatLngToDivPixel(tr);
@@ -843,6 +843,13 @@ function Cluster(markerClusterer) {
       crime: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize()),
       311: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize())
   };
+  this.clusterIcon_['311'].styles_ = this.clusterIcon_['311'].styles_.map(style => {
+      return {
+          url: style.url.replace('crime', '311'),
+          height: style.height,
+          width: style.width
+      }
+  });
 }
 
 /**
@@ -1035,16 +1042,20 @@ Cluster.prototype.updateIcon = function() {
   }
 
   var projection = this.markerClusterer_.getProjection();
-  var numStyles = this.markerClusterer_.getStyles().length;
+  var numStyles = this.markerClusterer_.getStyles().length;  
   var crimeSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === 'crime'), numStyles);
+  var svcSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === '311'), numStyles);
+  var r1 = this.clusterIcon_['crime'].styles_[crimeSums.index].width / 2,
+      r2 = this.clusterIcon_['311'].styles_[svcSums.index].width / 2;
+
   var center = projection.fromLatLngToDivPixel(this.center_);
-  center.x -= this.clusterIcon_['crime'].width_ / 2;
-  this.clusterIcon_['crime'].setCenter(this.center_);
+  center.x -= r2 / 1.5;
+  this.clusterIcon_['crime'].setCenter(projection.fromDivPixelToLatLng(center));
   this.clusterIcon_['crime'].setSums(crimeSums);
-  this.clusterIcon_['crime'].show();
-  var svcSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === '311'), numStyles);  
+  this.clusterIcon_['crime'].show();  
+
   var center = projection.fromLatLngToDivPixel(this.center_);
-  center.x += this.clusterIcon_['crime'].width_ / 2;
+  center.x += r1 / 1.5;
   this.clusterIcon_['311'].setCenter(projection.fromDivPixelToLatLng(center));
   this.clusterIcon_['311'].setSums(svcSums);
   this.clusterIcon_['311'].show();

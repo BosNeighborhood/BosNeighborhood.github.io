@@ -87,7 +87,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/marker
                     $scope.markerCluster.addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
                 }
                 else
-                    $scope.markerCluster = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: ["/data/img/crime/m", "/data/img/311/m"], gridSize: 120 });
+                    $scope.markerCluster = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: "/data/img/crime/m", gridSize: 120 });
                 initTypeFilterOptions($scope, datasetType, data);
 
                 if (needUpdateDateTimeFilter) {
