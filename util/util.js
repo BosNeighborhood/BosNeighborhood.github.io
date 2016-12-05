@@ -42,7 +42,7 @@
             return;
         }
         // todo: allow unlimited # of records?
-        var urlBuilder = new UrlBuilder(datasetType).limit(20);
+        var urlBuilder = new UrlBuilder(datasetType).limit(2000);
         if (datasetType === '311') {
             // remove data before Aug 2015 since no crime data for that time period is available
             urlBuilder.addCmpFilter("open_dt", ">", new Date(2015, 7, 1));
