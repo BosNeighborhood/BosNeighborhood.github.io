@@ -39,7 +39,7 @@ function (d3, $, angular, util) {
         $scope.map = null;
         $scope.prevZoomLevel = 11;
         $scope.markers = {};
-        $scope.markerCluster = {};        
+        $scope.markerCluster = null;        
         $scope.infoWindow = new google.maps.InfoWindow;
         // region -> list of polygons representing the neighborhood
         $scope.region_neighborhood_ht = {};

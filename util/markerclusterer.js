@@ -1,3 +1,10 @@
+// customized for 'Under the Skin of the City' project
+// assume markers have datasetType attribute which value could be 'crime' | '311'
+// assume icons for the two datasetTypes are located in */crime/* and */311/*
+// other than 'crime' and '311' all other parts in the path are the same
+// for each cluster display two icons side by side for each datasetType
+// numbers are shortend, e.g. 5437 => '>5k', see calculator_ for details
+
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3.js
@@ -641,12 +648,12 @@ MarkerClusterer.prototype.getExtendedBounds = function(bounds) {
       bounds.getNorthEast().lng());
   var bl = new google.maps.LatLng(bounds.getSouthWest().lat(),
       bounds.getSouthWest().lng());
-
-  // display more clusters in far view
+  
   var gridSize = this.gridSize_;
-  if (this.map_.getZoom() <= 11) {
-      gridSize = parseInt(this.gridSize_ / 1.5, 10);
-  }
+  // display more clusters in far view
+  //if (this.map_.getZoom() <= 11) {
+  //    gridSize = parseInt(this.gridSize_ / 1.5, 10);
+  //}
 
   // Convert the points to pixels and the extend out by the grid size.
   var trPix = projection.fromLatLngToDivPixel(tr);
@@ -839,8 +846,17 @@ function Cluster(markerClusterer) {
   this.center_ = null;
   this.markers_ = [];
   this.bounds_ = null;
-  this.clusterIcon_ = new ClusterIcon(this, markerClusterer.getStyles(),
-      markerClusterer.getGridSize());
+  this.clusterIcon_ = {
+      crime: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize()),
+      311: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize())
+  };
+  this.clusterIcon_['311'].styles_ = this.clusterIcon_['311'].styles_.map(style => {
+      return {
+          url: style.url.replace('crime', '311'),
+          height: style.height,
+          width: style.width
+      }
+  });
 }
 
 /**
@@ -941,7 +957,8 @@ Cluster.prototype.getBounds = function() {
  * Removes the cluster
  */
 Cluster.prototype.remove = function() {
-  this.clusterIcon_.remove();
+  this.clusterIcon_['crime'].remove();
+  this.clusterIcon_['311'].remove();
   this.markers_.length = 0;
   delete this.markers_;
 };
@@ -1026,15 +1043,30 @@ Cluster.prototype.updateIcon = function() {
 
   if (this.markers_.length < this.minClusterSize_) {
     // Min cluster size not yet reached.
-    this.clusterIcon_.hide();
+    // todo: consider cluster size for each of the two types
+    this.clusterIcon_['crime'].hide();
+    this.clusterIcon_['311'].hide();
     return;
   }
 
-  var numStyles = this.markerClusterer_.getStyles().length;
-  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
-  this.clusterIcon_.setCenter(this.center_);
-  this.clusterIcon_.setSums(sums);
-  this.clusterIcon_.show();
+  var projection = this.markerClusterer_.getProjection();
+  var numStyles = this.markerClusterer_.getStyles().length;  
+  var crimeSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === 'crime'), numStyles);
+  var svcSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === '311'), numStyles);
+  var r1 = this.clusterIcon_['crime'].styles_[crimeSums.index].width / 2,
+      r2 = this.clusterIcon_['311'].styles_[svcSums.index].width / 2;
+
+  var center = projection.fromLatLngToDivPixel(this.center_);
+  center.x -= r2 / 1.5;
+  this.clusterIcon_['crime'].setCenter(projection.fromDivPixelToLatLng(center));
+  this.clusterIcon_['crime'].setSums(crimeSums);
+  this.clusterIcon_['crime'].show();  
+
+  var center = projection.fromLatLngToDivPixel(this.center_);
+  center.x += r1 / 1.5;
+  this.clusterIcon_['311'].setCenter(projection.fromDivPixelToLatLng(center));
+  this.clusterIcon_['311'].setSums(svcSums);
+  this.clusterIcon_['311'].show();
 };
 
 

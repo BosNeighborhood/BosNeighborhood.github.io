@@ -1,6 +1,6 @@
 ﻿/// <reference path="../third-party/lodash.js" />
 
-define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_, util, d3, Debounce) {
+define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/markerclusterer'], function (_, util, d3, Debounce) {
     // datasetType: 'crime' or '311'
     // needUpdateDateTimeFilter: boolean, update date&time filter charts if true
     function render($scope, datasetType, needUpdateDateTimeFilter) {
@@ -52,7 +52,8 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                             position: { lat: +record.lat, lng: +record.long },
                             icon: iconUrl,
                             visible: visible,
-                            record: record
+                            record: record,
+                            datasetType: datasetType
                         })
                     }).value();
                 _.forEach($scope.markers[datasetType], marker => {
@@ -80,14 +81,13 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map'], function (_
                         $scope.infoWindow.open($scope.map);
                     });
                 });
-                var imagePath = datasetType === "crime" ? "/data/img/crime/m" : "/data/img/311/m";
                 // update marker cluster
-                if ($scope.markerCluster[datasetType]){
-                    $scope.markerCluster[datasetType].clearMarkers();
-                    $scope.markerCluster[datasetType].addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
+                if ($scope.markerCluster) {                    
+                    $scope.markerCluster.removeMarkers(_.filter($scope.markerCluster.getMarkers(), marker => marker.datasetType === datasetType));
+                    $scope.markerCluster.addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
                 }
                 else
-                    $scope.markerCluster[datasetType] = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: imagePath, gridSize: 120 });
+                    $scope.markerCluster = new MarkerClusterer($scope.map, $scope.markers[datasetType], { imagePath: "/data/img/crime/m", gridSize: 120 });
                 initTypeFilterOptions($scope, datasetType, data);
 
                 if (needUpdateDateTimeFilter) {
