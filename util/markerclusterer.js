@@ -950,8 +950,8 @@ Cluster.prototype.getBounds = function() {
  * Removes the cluster
  */
 Cluster.prototype.remove = function() {
-    this.clusterIcon_['crime'].remove();
-    this.clusterIcon_['311'].remove();
+  this.clusterIcon_['crime'].remove();
+  this.clusterIcon_['311'].remove();
   this.markers_.length = 0;
   delete this.markers_;
 };
@@ -1036,8 +1036,9 @@ Cluster.prototype.updateIcon = function() {
 
   if (this.markers_.length < this.minClusterSize_) {
     // Min cluster size not yet reached.
-      this.clusterIcon_['crime'].hide();
-      this.clusterIcon_['311'].hide();
+    // todo: consider cluster size for each of the two types
+    this.clusterIcon_['crime'].hide();
+    this.clusterIcon_['311'].hide();
     return;
   }
 
