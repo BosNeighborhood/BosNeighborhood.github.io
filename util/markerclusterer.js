@@ -839,8 +839,10 @@ function Cluster(markerClusterer) {
   this.center_ = null;
   this.markers_ = [];
   this.bounds_ = null;
-  this.clusterIcon_ = new ClusterIcon(this, markerClusterer.getStyles(),
-      markerClusterer.getGridSize());
+  this.clusterIcon_ = {
+      crime: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize()),
+      311: new ClusterIcon(this, markerClusterer.getStyles(), markerClusterer.getGridSize())
+  };
 }
 
 /**
@@ -941,7 +943,8 @@ Cluster.prototype.getBounds = function() {
  * Removes the cluster
  */
 Cluster.prototype.remove = function() {
-  this.clusterIcon_.remove();
+    this.clusterIcon_['crime'].remove();
+    this.clusterIcon_['311'].remove();
   this.markers_.length = 0;
   delete this.markers_;
 };
@@ -1026,15 +1029,25 @@ Cluster.prototype.updateIcon = function() {
 
   if (this.markers_.length < this.minClusterSize_) {
     // Min cluster size not yet reached.
-    this.clusterIcon_.hide();
+      this.clusterIcon_['crime'].hide();
+      this.clusterIcon_['311'].hide();
     return;
   }
 
+  var projection = this.markerClusterer_.getProjection();
   var numStyles = this.markerClusterer_.getStyles().length;
-  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
-  this.clusterIcon_.setCenter(this.center_);
-  this.clusterIcon_.setSums(sums);
-  this.clusterIcon_.show();
+  var crimeSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === 'crime'), numStyles);
+  var center = projection.fromLatLngToDivPixel(this.center_);
+  center.x -= this.clusterIcon_['crime'].width_ / 2;
+  this.clusterIcon_['crime'].setCenter(this.center_);
+  this.clusterIcon_['crime'].setSums(crimeSums);
+  this.clusterIcon_['crime'].show();
+  var svcSums = this.markerClusterer_.getCalculator()(this.markers_.filter(marker => marker.datasetType === '311'), numStyles);  
+  var center = projection.fromLatLngToDivPixel(this.center_);
+  center.x += this.clusterIcon_['crime'].width_ / 2;
+  this.clusterIcon_['311'].setCenter(projection.fromDivPixelToLatLng(center));
+  this.clusterIcon_['311'].setSums(svcSums);
+  this.clusterIcon_['311'].show();
 };
 
 
