@@ -1,10 +1,11 @@
 ﻿/// <reference path="../third-party/lodash.js" />
 
-define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/markerclusterer'], function (_, util, d3, Debounce) {
+define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_map', 'util/markerclusterer'], function (_, util, d3, Debounce, Progress) {
     // datasetType: 'crime' or '311'
     // needUpdateDateTimeFilter: boolean, update date&time filter charts if true
     function render($scope, datasetType, needUpdateDateTimeFilter) {
         return new Promise((resolve, reject) => {
+            //Progress.start();
             // load new data
             var filters = datasetType === "crime" ? $scope.type_filters.selected_crime_types
                                                   : $scope.type_filters.selected_service_types,
@@ -35,9 +36,12 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/marker
 
                 deleteMarkers($scope, datasetType);                
                 // create new markers            
+                // todo: move to server side script to not block UI
+                //var processed_records = -1;
                 $scope.markers[datasetType] = _(data)
                     .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
                     .map(record => {
+                        //Progress.report(++processed_records / num_good_record * 95/*leave some space for cluster rendering*/);
                         var visible = $scope.currSelectedRegion 
                                         ? google.maps.geometry.poly.containsLocation(new google.maps.LatLng(+record.lat, +record.long), $scope.currSelectedRegion)
                                         : true;
@@ -94,6 +98,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/marker
                     updateDateTimeFilter($scope);
                 }
 
+                //Progress.complete();
                 resolve();
             });
         });
