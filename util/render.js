@@ -95,6 +95,9 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/marker
                 }
 
                 resolve();
+
+                if (datasetType === 'crime' && $scope.currSelectedRegion)
+                    renderCrimeTypeChart($scope);
             });
         });
     }
@@ -329,6 +332,51 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'google_map', 'util/marker
            render($scope, '311')
         ]).then(() => {
             updateDateTimeFilter($scope);
+        });
+    }
+
+    // todo: the result is an approximation, not exact numbers
+    // for current region
+    //      to improve performance it relies on the API to aggregate records
+    //      within current regions bounding box, which will almost always be 
+    //      overstatement, level of overstatement depends on region's shape 
+    //      axis-aligned rectangluar region should return exact numbers
+    // for average data
+    //      due to lack of population/area data, the average is calculated as
+    //      total number of records per type / total numbers of regions on map
+    //      ideally all number should be normalized according to population
+    function renderCrimeTypeChart($scope) {
+        return new Promise((resolve, reject) => {
+            svg = d3.select("#neighborhoods svg");                        
+            d3.queue()
+              // request crime data for selected region in current date/time range
+              .defer(util.requestAggCrimeData, $scope.currDateTimeFilterExtent, $scope.currSelectedRegion.getBounds())
+              // request crime data for all regions in current date/time range
+              .defer(util.requestAggCrimeData, $scope.currDateTimeFilterExtent, null)
+              .await((error, regionResponse, allResponse) => {
+                  if (error) {
+                      console.log(error);
+                  }
+                  var regionData = JSON.parse(regionResponse.response),
+                      allData = JSON.parse(allResponse.response);                  
+                  regionTypeIndex = _(regionData).take(5).map(d=> {
+                      return {
+                          key: d.offense_code_group,
+                          value: +d.count_offense_code_group
+                      };
+                  }).value();
+                  var num_regions = _($scope.region_neighborhood_ht).values().flatten().value().length;
+                  regionTypeIndex = _.map(regionTypeIndex, type => {
+                      var allCount = +allData.find(d=>d.offense_code_group === type.key).count_offense_code_group;
+                      return {
+                          key: type.key,
+                          value: type.value,
+                          avg: Math.round(allCount / num_regions)
+                      };
+                  });
+                  console.log(regionTypeIndex);
+                  resolve();
+              });
         });
     }
 
