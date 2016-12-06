@@ -20,7 +20,7 @@
                   },
                   {
                       element: $('.filter-top').get(0),
-                      intro: "Type an issue you care about, and see what the status is in a particular area."
+                      intro: "Type or click an issue you care about, and see what the status is in a particular area."
                   },
                   {
                       element: $('.filter-bottom').get(0),
