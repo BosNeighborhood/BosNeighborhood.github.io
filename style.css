@@ -62,6 +62,7 @@
 #neighborhoods svg {
     width: 400px;
     height: 200px;
+	margin-left:20px;
 }
 
 .filter-top {
@@ -70,6 +71,9 @@
     left: 5px; /*10% */
     margin: auto;
     z-index: 1;
+	background-color: white;
+    opacity: 0.85;
+    padding: 3px;
     visibility: hidden;
 }
 
@@ -77,7 +81,7 @@
     position: absolute;
     bottom: 10px;
 	left: 5px;
-    width: 300px;
+    width: 350px;
     height: 200px;
     z-index: 1;
     background-color: white;
@@ -88,7 +92,7 @@
 }
 
     .filter-bottom svg {
-        width: 300px;
+        width: 350px;
         height: 200px;
     }
 
@@ -191,6 +195,15 @@ button {
     fill: #ccc;
 }
 
+/* basic positioning */
+.legend { list-style: none; }
+.legend li { float: left; margin-right: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+/* your colors */
+.legend .selectedNeighb { background-color: #4682b4; }
+.legend .average { background-color: #7aa76d; }
+
+
 #custom-search-input {
     margin: 0;
     margin-top: 10px;
@@ -281,12 +294,12 @@ button {
     /* animation: name duration timing-function delay 
                   iteration-count direction fill-mode 
                   play-state */    
-    animation: exit 400ms ease-in-out;
+    animation: exit 700ms ease-in-out;
     animation-iteration-count: 1;
 }
 
 .tab-pane.is-entering {
-    animation: enter 400ms ease-in-out;
+    animation: enter 700ms ease-in-out;
     animation-iteration-count: 1;
 }
 

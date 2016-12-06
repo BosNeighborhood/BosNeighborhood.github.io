@@ -19,7 +19,7 @@
                 <h1> Under the Skin of the City </h1>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span> About us</a></li>
+                <li><a href="AboutUs.html"><span class="glyphicon glyphicon-info-sign"></span> About us</a></li>
                 <li><a href="#"><span class="glyphicon glyphicon-share"></span> Share</a></li>
             </ul>
         </div>
@@ -49,20 +49,42 @@
                         <div data-spy="scroll" data-target=".tab-content" data-offset="50">
                             <div id="section1" class="container-fluid">
                                 <h1>Introduction</h1>
-								<p><small> An online tool to help students pick the right neghborhood to live</small></p>
-                                <p> Welcome to the online neighborhood guide. Our online tool helps you to explore and find the right neighborhood in terms of safety and city services.</p>
+                                <p> Welcome to the online neighborhood guide. This website is an online tool to help students pick the right neghborhood to live.									
+								Our online tool helps you to explore and find the right neighborhood in terms of safety and city services.</p>
                             </div>
-                            <div id="section2" class="container-fluid">
-                                <h1>Boston 311</h1>
-                                <p> 311 is an easy-to-remember telephone number that connects you with highly-trained
+                            <div id="desc-311" class="container-fluid">
+                                <div class="row">
+									<div class="col-xs-1"><img src="data/img/311/icon.png" width="40" height="40"></div>
+									<div class="col-xs-10" style="padding:10px 10px 10px 15px;"><h1>Boston 311 service request</h1></div>
+								</div>	
+                                <p> 311 is the number to call to obtain information and access to all non-emergency City services. </br>
+									311 is an easy-to-remember telephone number that connects you with highly-trained
                                     Constituent Service Center representatives who are ready to help you with requests for
-                                    non-emergency City services and information.
+                                    non-emergency City services and information.</br>
+									The 311 Constituent Service Center is open 24 hours a day, 7 days a week, 365 days a year.</br>
+									<b>This tool</b> enables you to explore the 311 service request incidents from Agust 15 to the current time in Bosotn. 
                                 </p>
+								<a href="https://mayors24.cityofboston.gov/">
+                                    Click here to see more examples
+                                </a>
+								</br>
+								<a href="http://www.cityofboston.gov/311/">
+                                    Read more about 311 service request system here
+                                </a>
                             </div>
-                            <div id="section3" class="container-fluid">
-								<h1>Boston Crime</h1>
-                                <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
-                                <p>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</p>
+							</br>
+                            <div id="desc-crime" class="container-fluid">
+								<div class="row">
+									<div class="col-xs-1"><img src="data/img/crime/icon.png" width="40" height="40"></div>
+									<div class="col-xs-10" style="padding:10px 10px 10px 15px;"><h1>Boston crime data</h1></div>
+								</div>	                               
+								<p>Crime incident reports provided by Boston Police Department from August 15, 2016 to date.</br>
+								<b>This tool</b> provides features to explore the crime incidents in Boston. You can select any crime type, to realize what is happening in each neighborhood. 
+								By clicking on each incident, you will see more details.</br>
+								You can also compare the top 5 crime types in each neighborhood to the total avrage rate of those cirme types.</p>
+								<a href="https://data.cityofboston.gov/Public-Safety/Crime-Incident-Reports-August-2015-To-Date-Source-/fqn4-4qap">
+                                    Click here to see the data source
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -71,7 +93,7 @@
                         <div class="beveled-media-box img-overlay" style="background-image:url('{{selectedNeighborhood.img}}');">
                             <div class="center panel-padding">
                                 <h3>{{selectedNeighborhood.name}}</h3>
-                                <p>It's all in Allston-(Brighton)</p>
+                                <p>It's all in Boston</p>
                             </div>
                         </div>
                         <div class="desc">
@@ -104,8 +126,14 @@
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="collapse2" class="panel-collapse collapse">
+                                    <div id="collapse2" class="panel-collapse collapse in">
                                         <div class="panel-body">
+										<p>Top five cripe types in {{selectedNeighborhood.name}} compared to the total average</p>
+										<!-- crime chart legend -->
+										<ul class="legend">
+											<li><span class="selectedNeighb"></span> Crime rate in {{selectedNeighborhood.name}}</li>
+											<li><span class="average"></span> Average Crime rate in all regions</li>
+										</ul>
                                             <svg></svg>
                                         </div>
                                     </div>

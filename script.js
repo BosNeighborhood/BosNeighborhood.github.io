@@ -48,9 +48,9 @@ function (d3, $, angular, util) {
         $scope.currSelectedRegion = null;
         $scope.regionClickDisabled = false;
         // todo: show some stats along with the types "Theft (**19 cases**)"
-        $scope.crime_types = ['All'];
-        $scope.service_types = ['All'];
-        $scope.type_filters = { selected_crime_types: ['All'], selected_service_types: ['All'] };
+        $scope.crime_types = ['All crime type'];
+        $scope.service_types = ['All service type'];
+        $scope.type_filters = { selected_crime_types: ['All crime type'], selected_service_types: ['All service type'] };
         $scope.currDateTimeFilterExtent = {};
         $scope.dateScaleX = null;
         $scope.dateScaleY = null;

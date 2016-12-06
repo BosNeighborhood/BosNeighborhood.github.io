@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+    
+  .carousel-inner img {
+      width: 100%; /* Set width to 100% */
+      margin: auto;
+      min-height:200px;
+  }
+
+  /* Hide the carousel text when the screen is less than 600 pixels wide */
+  @media (max-width: 600px) {
+    .carousel-caption {
+      display: none; 
+    }
+  }
+  </style>
+  
+</head>
+<body>
+
+ <nav class="navbar navbar-inverse">
+        <div class="container-fluid" id="top-header">
+            <div class="navbar-header">
+                <a href="index.html"><h1> Under the Skin of the City </h1></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="AboutUs.html"><span class="glyphicon glyphicon-info-sign"></span> About us</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-share"></span> Share</a></li>
+            </ul>
+        </div>
+    </nav>
+
+<div class="container">
+  <div class="jumbotron"> 
+	<h1>Project Team</h1> 
+	<p>This project has been done as a course project for "Information Visualization" course, at Northeastern University, college of computer and information science.</p> 
+  </div>
+   
+</div>
+
+   
+<div class="container text-center">    
+  <h3>Team members</h3><br>
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="https://lh6.googleusercontent.com/-lTjK1o6AHOw/AAAAAAAAAAI/AAAAAAAAABU/pOzN-2y-0n8/photo.jpg" class="img-responsive" style="width:100%" alt="Image">
+      <p>Borui Gu</p>
+    </div>
+    <div class="col-sm-4"> 
+      <img src="https://lh5.googleusercontent.com/-msyrFI2ZcaI/AAAAAAAAAAI/AAAAAAAABOM/aS24KzCNZno/photo.jpg" class="img-responsive" style="width:100%" alt="Image">
+      <p>Ameneh Shamekhi</p>    
+    </div>
+    <div class="col-sm-4">
+	  <img src="https://www.northeastern.edu/visualization/wp-content/uploads/2015/08/image-YiYang.jpg" class="img-responsive" style="width:100%" alt="Image">
+      <p>Yi Yang</p>
+      
+    </div>
+  </div>
+</div><br>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>
+
+</body>
+</html>
