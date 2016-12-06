@@ -244,15 +244,15 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                           .on("end", onBrushEnd);
         var eventSelection = {};
         svg.append("g").attr("class", "brush-date")
-           .call(brushDate)
-           .call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
+          		.call(brushDate)
+          		.call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
 
         var brushTime = d3.brushX()
                           .extent([[0, height - (height / 2 - margin) - 15], [width, height - margin - 15]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         svg.append("g").attr("class", "brush-time")
-           .call(brushTime);
+           	       .call(brushTime);
 
         function onBrush() {
             var filterType = d3.select(this).attr("class").split('-').pop();
@@ -387,12 +387,12 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                   var width = +svg.style("width").replace("px", ""),
                       height = +svg.style("height").replace("px", ""),
                       margin = 20,
-					  padding = 30;
+		      padding = 30;
                   var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
                       x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([20, x0.bandwidth()]),
                       y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
                   d3.select("#neighborhoods svg .x-axis").transition().duration(300)
-                          .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
+                          			  .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
 						  .selectAll("text")	
 							.style("text-anchor", "middle")
 							.attr("dx", "-.8em")
@@ -403,7 +403,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
 						   .call(d3.axisLeft(y).ticks(5));	
 
 						   
-				  var types = svg.selectAll(".type").data(regionTypeIndex);
+		  var types = svg.selectAll(".type").data(regionTypeIndex);
                   types.exit().selectAll("rect").transition().duration(300)
                               .attr("y", y(0))
                               .attr("height", d => height - margin - y(0))
