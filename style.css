@@ -62,6 +62,7 @@
 
 .navbar-right>li>a {
     padding-bottom: 0px;
+    top: -8px;
 }
 
 #neighborhoods svg {
