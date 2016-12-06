@@ -391,7 +391,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                   var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
                       x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([0, x0.bandwidth()]),
                       y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
-                  d3.select("#neighborhoods svg .axis").transition().duration(300)
+                  d3.select("#neighborhoods svg .x-axis").transition().duration(300)
                           .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
 						  .selectAll("text")	
 							.style("text-anchor", "middle")
@@ -399,9 +399,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
 							.attr("dy", ".15em")
 							.attr("transform", "rotate(0)");
 							
-				  d3.select("#neighborhoods svg").append("g") //y axis
-                           .attr("class", "axis")
-						   .attr("transform", "translate("+(padding)+",0)")
+                  d3.select("#neighborhoods svg .y-axis").transition().duration(300)
 						   .call(d3.axisLeft(y).ticks(5));	
 
 						   

@@ -241,9 +241,12 @@
         var svg = d3.select("#neighborhoods svg");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
-            margin = 20;
-        svg.append("g").attr("class", "axis") //x axis
+            margin = 20,
+            padding = 25;
+        svg.append("g").attr("class", "axis x-axis")
                        .attr("transform", "translate(5," + (height - margin) + ")");
+        svg.append("g").attr("class", "axis y-axis")
+					   .attr("transform", "translate(" + (padding) + ",0)")
     }
 
     function shrinkBounds(bounds) {
