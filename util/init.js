@@ -196,43 +196,43 @@
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
             margin = 35,
-			padding = 40;     
-		var y1 = d3.scaleLinear().range([height/2 - 30, 0])
-								.domain([0, 100]);
-		var y2 = d3.scaleLinear().range([height - margin, height/2])
-								.domain([0, 100]);
+	    padding = 40;     
+	var y1 = d3.scaleLinear().range([height/2 - 30, 0])
+				 .domain([0, 100]);
+	var y2 = d3.scaleLinear().range([height - margin, height/2])
+				 .domain([0, 100]);
 								
         var dateFilter = svg.append("g")
-							.attr("class", "date-filter");
+			    .attr("class", "date-filter");
 							
-		dateFilter.append("g").attr("class", "axis")  //x-axis
-				  .attr("transform", "translate(0," + (height / 2 - margin + 5) + ")");
+	dateFilter.append("g").attr("class", "axis")  //x-axis
+			      .attr("transform", "translate(0," + (height / 2 - margin + 5) + ")");
 		
-		dateFilter.append("g").attr("class", "axis")
-				  .attr("transform", "translate("+(padding)+",0)")
-				  .call(d3.axisLeft(y1).ticks(5));
+	dateFilter.append("g").attr("class", "axis")
+			      .attr("transform", "translate("+(padding)+",0)")
+			      .call(d3.axisLeft(y1).ticks(5));
 		 			   	
-		svg.append("text")
+	svg.append("text")
             .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             .attr("transform", "translate("+ padding/3 +","+(height/2.5)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             .text("Frequency Percentage");
 			
-		svg.append("text")
+	svg.append("text")
             .attr("text-anchor", "middle")  
             .attr("transform", "translate("+ (width/2) +","+(height/2)+")")  
             .text("Date");	
 			
         var timeFilter = svg.append("g")
-							.attr("class", "time-filter");
+			    .attr("class", "time-filter");
 							
         timeFilter.append("g").attr("class", "axis")//x-axis
                               .attr("transform", "translate(0," + (height - margin) + ")"); 
 							  
-		timeFilter.append("g").attr("class", "axis")
-				  .attr("transform", "translate("+(padding)+",0)")
-				  .call(d3.axisLeft(y2).ticks(5));	
+	timeFilter.append("g").attr("class", "axis")
+			      .attr("transform", "translate("+(padding)+",0)")
+			      .call(d3.axisLeft(y2).ticks(5));	
 				  
-		svg.append("text")
+	svg.append("text")
             .attr("text-anchor", "middle")  
             .attr("transform", "translate("+ (width/2) +","+(height-(5))+")")  
             .text("Time of Day");							
@@ -246,8 +246,8 @@
         svg.append("g").attr("class", "axis x-axis")
                        .attr("transform", "translate(15," + (height - margin) + ")");
         svg.append("g").attr("class", "axis y-axis")
-					   .attr("transform", "translate(" + (padding) + ",0)");
-		svg.append("text")
+		       .attr("transform", "translate(" + (padding) + ",0)");
+	svg.append("text")
             .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             .attr("transform", "translate(10,"+(height/2.5)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             .text("Incident Rate");
