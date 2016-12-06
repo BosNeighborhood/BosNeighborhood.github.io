@@ -239,7 +239,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             height = +svg.style("height").replace("px", ""),
             margin = 20;
         var brushDate = d3.brushX()
-                          .extent([[0, -10], [width, height / 2 - margin - 10]])
+                          .extent([[40, -10], [width - margin, height / 2 - margin - 10]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         var eventSelection = {};
@@ -248,7 +248,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
           		.call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
 
         var brushTime = d3.brushX()
-                          .extent([[0, height - (height / 2 - margin) - 15], [width, height - margin - 15]])
+                          .extent([[40, height - (height / 2 - margin) - 15], [width - margin, height - margin - 15]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         svg.append("g").attr("class", "brush-time")

@@ -1,7 +1,7 @@
 ﻿﻿define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map'], function ($, _, d3, util, render, neighborhoods_shape) {
     function initMap($scope) {
         var region_neighborhood_ht = $scope.region_neighborhood_ht;
-        new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
+        new google.maps.Geocoder().geocode({ 'address': "Newton" }, (results, status) => {
             // todo: retry if status is not OK
             if (status == google.maps.GeocoderStatus.OK) {
                 var bos_lat = results[0].geometry.location.lat(),

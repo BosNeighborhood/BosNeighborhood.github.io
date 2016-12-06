@@ -9,12 +9,12 @@
 }
 
 #map {
-    height: calc(100vh - 50px/*header*/);
+    height: calc(100vh - 20px/*header*/);
     padding: 0px;
 }
 
 .tab-content {
-    height: calc(100vh - 50px/*header*/ - 44px/*tab*/);
+    height: calc(100vh - 20px/*header*/ - 44px/*tab*/);
     overflow-y: scroll;
 }
 
@@ -31,9 +31,9 @@
 
 
 .navigation {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 20px);
     outline: 1px solid #e6e6ff;
-    min-height: 500px;
+    /*min-height: 500px;*/
     padding: 0px;
 }
 
@@ -58,6 +58,10 @@
 
 .navbar-form {
     width: 100%;
+}
+
+.navbar-right>li>a {
+    padding-bottom: 0px;
 }
 
 #neighborhoods svg {
