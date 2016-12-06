@@ -1,4 +1,10 @@
 ﻿define(['jquery', 'lodash', 'd3', 'util/UrlBuilder', 'google_map'], function ($, _, d3, UrlBuilder) {
+    // ref: http://stackoverflow.com/questions/1199352/smart-way-to-shorten-long-strings-with-javascript
+    String.prototype.trunc = String.prototype.trunc ||
+      function (n) {
+          return (this.length > n) ? this.substr(0, n - 1) + '..' : this;
+      };
+
     if (!google.maps.Polygon.prototype.getBounds) {
         google.maps.Polygon.prototype.getBounds = function () {
             var bounds = new google.maps.LatLngBounds()
@@ -136,6 +142,7 @@
         if (!fromTab.is(toTab) && toTab.hasClass("active")) {
             // todo: angular's html update will be faster than this animation
             //return switchTab(toTab, toTab);
+            $('body').trigger("tabAnimationEnd");
             return;            
         }
         var fromLi = $(`.nav-tabs li[tab="#${fromTab.attr("id")}"]`),

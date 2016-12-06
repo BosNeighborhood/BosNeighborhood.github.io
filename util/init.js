@@ -51,20 +51,23 @@
                         return;
 
                     // enable click event on all regions
-                    $scope.regionClickDisabled = false;
-                    // switch back to introduction tab
-                    util.switchTab($("#neighborhoods"), $("#home"));
+                    $scope.regionClickDisabled = false;                    
                     // remove neighborhood filter if any
                     if ($scope.currSelectedRegion) {
                         $scope.currSelectedRegion = null;
                         // show all regions
                         _.forOwn($scope.region_neighborhood_ht, value => {
                             _.forEach(value, region => region.setOptions({ strokeOpacity: 0.8, fillOpacity: 0.5 }));
-                        });
-                        $("body").on('tabAnimationEnd', function () {
-                            render.renderAll($scope);
-                        });
+                        });                        
                     }
+                    // use one to unbound after first invocation
+                    // if we don't remove this handler, next time it will
+                    // add the same handler, and this will be called twice                    
+                    $("body").one('tabAnimationEnd', function () {
+                        render.renderAll($scope);
+                    });
+                    // switch back to introduction tab
+                    util.switchTab($("#neighborhoods"), $("#home"));
                 });
                 // load neighborhood borders as polygons
                 _.forEach(neighborhoods_shape.features, neighborhood => {
@@ -123,6 +126,7 @@
                 });
 
                 initDateTimeFilter();
+                initSidebarChart();
                 render.renderAll($scope);
             }
         });
@@ -148,8 +152,11 @@
 						$scope.selectedNeighborhood = neighborhood;
 						$scope.$apply();
 						$(".nav-tabs li:last-child").removeClass('disabled');
+						$("body").one('tabAnimationEnd', function () {						    
+						    render.renderAll($scope);
+						});
 						util.switchTab($("#home"), $("#neighborhoods"));
-						console.log("neighborhood selected: " + key);
+						//console.log("neighborhood selected: " + key);
                     }
                 });
                 map.setCenter(this.getBounds().getCenter());
@@ -157,11 +164,7 @@
                 // hide all other region polygons
                 _.forOwn($scope.region_neighborhood_ht, value => {
                     _.forEach(value, region => { if (region !== this) region.setOptions({ strokeOpacity: 0.0, fillOpacity: 0.0 }) });
-                });
-
-                $("body").on('tabAnimationEnd', function () {
-                    render.renderAll($scope);
-                });
+                });                
             }
             else {                
                 // propagate event to map if not clicking selected region
@@ -199,6 +202,15 @@
         svg.append("g").attr("class", "time-filter")
                        .append("g").attr("class", "axis")
                             .attr("transform", "translate(0," + (height - margin) + ")");        
+    }
+
+    function initSidebarChart() {
+        var svg = d3.select("#neighborhoods svg");
+        var width = +svg.style("width").replace("px", ""),
+            height = +svg.style("height").replace("px", ""),
+            margin = 20;
+        svg.append("g").attr("class", "axis")
+                       .attr("transform", "translate(0," + (height - margin) + ")");
     }
 
     function shrinkBounds(bounds) {
