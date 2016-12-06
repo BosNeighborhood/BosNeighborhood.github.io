@@ -1,4 +1,4 @@
-﻿/// <reference path="../third-party/lodash.js" />
+﻿﻿/// <reference path="../third-party/lodash.js" />
 
 define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_map', 'util/markerclusterer'], function (_, util, d3, Debounce, Progress) {
     // datasetType: 'crime' or '311'
@@ -132,7 +132,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             // month
             $scope.dateScaleX = d3.scaleTime()
                 .domain([new Date(_.first(monthIndex).key), d3.timeMonth.offset(new Date(_.last(monthIndex).key))])
-                .range([0, width - margin]);
+                .range([40, width - margin]);
             d3.select(".date-filter .axis").transition().duration(300)
                 // todo: fixed total # of ticks
                 .call(d3.axisBottom($scope.dateScaleX).ticks(d3.timeMonth.every(3)).tickFormat(tick => formatMonth(new Date(tick))));
@@ -140,11 +140,11 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         // percentage
         $scope.dateScaleY = d3.scaleLinear()
                 .domain([0, 100])
-                .rangeRound([height / 2 - margin, 0]);
+                .rangeRound([height / 2 - (margin), 0]);
         var bars = dateFilter.selectAll(".date-filter rect").data(monthIndex);
         bars.enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => $scope.dateScaleX(new Date(d.key))+40)
+            .attr("x", d => $scope.dateScaleX(new Date(d.key)))
             .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
@@ -154,7 +154,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             .remove();
         // update set
         bars.transition().duration(300)
-            .attr("x", d => $scope.dateScaleX(new Date(d.key))+40)
+            .attr("x", d => $scope.dateScaleX(new Date(d.key)))
             .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
@@ -180,7 +180,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             // time of day
             $scope.timeScaleX = d3.scaleLinear()
                 .domain([0, 24])
-                .rangeRound([0, width - margin]);
+                .rangeRound([40, width - margin]);
             d3.select(".time-filter .axis").transition().duration(300)
                 .call(d3.axisBottom($scope.timeScaleX));
         }
@@ -191,7 +191,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         var bars = timeFilter.selectAll(".time-filter rect").data(timeIndex);
         bars.enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => $scope.timeScaleX(+d.key)+40)
+            .attr("x", d => $scope.timeScaleX(+d.key))
             .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));
@@ -201,7 +201,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             .remove();
         // update set
         bars.transition().duration(300)
-            .attr("x", d => $scope.timeScaleX(+d.key)+40)
+            .attr("x", d => $scope.timeScaleX(+d.key))
             .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));

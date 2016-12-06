@@ -1,4 +1,4 @@
-﻿define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map'], function ($, _, d3, util, render, neighborhoods_shape) {
+﻿﻿define(['jquery', 'lodash', 'd3', 'util/util', 'util/render', 'data/boston_neighborhoods.js', 'google_map'], function ($, _, d3, util, render, neighborhoods_shape) {
     function initMap($scope) {
         var region_neighborhood_ht = $scope.region_neighborhood_ht;
         new google.maps.Geocoder().geocode({ 'address': "Boston" }, (results, status) => {
@@ -206,7 +206,7 @@
 							.attr("class", "date-filter");
 							
 		dateFilter.append("g").attr("class", "axis")  //x-axis
-				  .attr("transform", "translate("+(padding)+"," + (height / 2 - margin + 5) + ")");
+				  .attr("transform", "translate(0," + (height / 2 - margin + 5) + ")");
 		
 		dateFilter.append("g").attr("class", "axis")
 				  .attr("transform", "translate("+(padding)+",0)")
@@ -225,8 +225,8 @@
         var timeFilter = svg.append("g")
 							.attr("class", "time-filter");
 							
-        timeFilter.append("g").attr("class", "axis")
-                              .attr("transform", "translate("+padding+"," + (height - margin) + ")"); 
+        timeFilter.append("g").attr("class", "axis")//x-axis
+                              .attr("transform", "translate(0," + (height - margin) + ")"); 
 							  
 		timeFilter.append("g").attr("class", "axis")
 				  .attr("transform", "translate("+(padding)+",0)")
@@ -234,7 +234,7 @@
 				  
 		svg.append("text")
             .attr("text-anchor", "middle")  
-            .attr("transform", "translate("+ (width/2) +","+(height-(padding/6))+")")  
+            .attr("transform", "translate("+ (width/2) +","+(height-(5))+")")  
             .text("Time of Day");							
     }
     function initSidebarChart() {
