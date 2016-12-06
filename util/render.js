@@ -100,6 +100,9 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
 
                 //Progress.complete();
                 resolve();
+
+                if (datasetType === 'crime' && $scope.currSelectedRegion)
+                    renderCrimeTypeChart($scope);
             });
         });
     }
@@ -334,6 +337,84 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
            render($scope, '311')
         ]).then(() => {
             updateDateTimeFilter($scope);
+        });
+    }
+
+    // todo: the result is an approximation, not exact numbers
+    // for current region
+    //      to improve performance it relies on the API to aggregate records
+    //      within current regions bounding box, which will almost always be 
+    //      overstatement, level of overstatement depends on region's shape 
+    //      axis-aligned rectangluar region should return exact numbers
+    // for average data
+    //      due to lack of population/area data, the average is calculated as
+    //      total number of records per type / total numbers of regions on map
+    //      ideally all number should be normalized according to population
+    function renderCrimeTypeChart($scope) {
+        return new Promise((resolve, reject) => {            
+            d3.queue()
+              // request crime data for selected region in current date/time range
+              .defer(util.requestAggCrimeData, $scope.currDateTimeFilterExtent, $scope.currSelectedRegion.getBounds())
+              // request crime data for all regions in current date/time range
+              .defer(util.requestAggCrimeData, $scope.currDateTimeFilterExtent, null)
+              .await((error, regionResponse, allResponse) => {
+                  if (error) {
+                      console.log(error);
+                  }
+                  var regionData = JSON.parse(regionResponse.response),
+                      allData = JSON.parse(allResponse.response);                  
+                  regionTypeIndex = _(regionData).take(5).map(d=> {
+                      return {
+                          key: d.offense_code_group,
+                          value: +d.count_offense_code_group
+                      };
+                  }).value();
+                  var num_regions = _($scope.region_neighborhood_ht).values().flatten().value().length,
+                      max_value = -1;
+                  regionTypeIndex = _.map(regionTypeIndex, type => {
+                      var allCount = +allData.find(d=>d.offense_code_group === type.key).count_offense_code_group,
+                          avg = Math.round(allCount / num_regions);
+                      if (type.value > max_value) max_value = type.value;
+                      if (avg > max_value) max_value = avg;
+                      return {
+                          key: type.key,
+                          value: type.value,
+                          avg: avg
+                      };
+                  });
+                  // data collected, now render chart
+                  var svg = d3.select("#neighborhoods svg");
+                  var width = +svg.style("width").replace("px", ""),
+                      height = +svg.style("height").replace("px", ""),
+                      margin = 20;
+                  var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
+                      x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([0, x0.bandwidth()]),
+                      y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
+                  d3.select("#neighborhoods svg .axis").transition().duration(300)
+                          .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)));
+                  var types = svg.selectAll(".type").data(regionTypeIndex);
+                  types.exit().selectAll("rect").transition().duration(300)
+                              .attr("y", y(0))
+                              .attr("height", d => height - margin - y(0))
+                              .remove();
+                  var typesEnter = types.enter().append("g")
+                                 .attr("class", "type")
+                                 .attr("transform", d => "translate(" + x0(d.key) + ",0)");
+                  typesEnter.selectAll("rect")
+                       .data(d =>[{ name: 'value', value: d.value }, { name: 'avg', value: d.avg }])
+                       .enter()
+                       .append("rect")
+                          .attr("width", x1.bandwidth())
+                          .attr("x", d => x1(d.name))
+                          .attr("y", d => y(d.value))
+                          .attr("height", d => height - margin - y(d.value))
+                          .style("fill", d => d.name === 'value' ? '#4682b4' : '#ccc');
+                  //update set
+                  types.selectAll("rect").transition().duration(300)
+                          .attr("y", d => y(d.value))
+                          .attr("height", d => height - margin - y(d.value))
+                  resolve();
+              });
         });
     }
 

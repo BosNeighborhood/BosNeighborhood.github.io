@@ -3,14 +3,21 @@
         // type: 'crime' or '311'
         constructor(datasetType) {
             if (datasetType === 'crime') {
-                this.url = 'https://data.cityofboston.gov/resource/29yf-ye7n.json';
-                this.url += '?$select=hour,lat,long,occurred_on_date,offense_code_group,offense_description,street';
+                this.url = 'https://data.cityofboston.gov/resource/29yf-ye7n.json';                
             } else {
                 this.url = 'https://data.cityofboston.gov/resource/wc8w-nujj.json';
-                this.url += '?$select=case_title,closure_reason,latitude,longitude,neighborhood,open_dt,reason,subject';
             }
             this.hasWhereClause = false;
+            this.hasPreviousClause = false;
+        }
+
+        // add $select=value
+        select(value) {
+            if (this.hasPreviousClause) this.url += '&'
+            else this.url += '?'
             this.hasPreviousClause = true;
+            this.url += '$select=' + value;
+            return this;
         }
 
         // add $limit=value
@@ -19,6 +26,27 @@
             else this.url += '?'
             this.hasPreviousClause = true;
             this.url += '$limit=' + value;
+            return this;
+        }
+
+        // add $group=value
+        group(value) {
+            if (this.hasPreviousClause) this.url += '&'
+            else this.url += '?'
+            this.hasPreviousClause = true;
+            this.url += '$group=' + value;
+            return this;
+        }
+
+        // add $order=value
+        // by default use ascending order, if 'descending' is not undefined
+        // use descending order
+        order(value, descending) {
+            if (this.hasPreviousClause) this.url += '&'
+            else this.url += '?'
+            this.hasPreviousClause = true;
+            this.url += '$order=' + value;
+            if (descending) this.url += ' DESC';
             return this;
         }
 
