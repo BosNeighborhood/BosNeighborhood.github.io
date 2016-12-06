@@ -57,7 +57,7 @@
         }
         // 'All' will always come first in the list if selected
         // no need to add filters if 'All' is in list
-        if (typeFilters[0] !== 'All') {
+        if (typeFilters[0] !== 'All crime type' && typeFilters[0] !== 'All service type') {
             var column = datasetType === 'crime' ? 'offense_code_group' : 'subject';
             urlBuilder.addInFilter(column, typeFilters);
         }

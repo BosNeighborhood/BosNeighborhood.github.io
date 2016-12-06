@@ -144,8 +144,8 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         var bars = dateFilter.selectAll(".date-filter rect").data(monthIndex);
         bars.enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => $scope.dateScaleX(new Date(d.key)))
-            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100))
+            .attr("x", d => $scope.dateScaleX(new Date(d.key))+40)
+            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
         bars.exit().transition().duration(300)
@@ -154,8 +154,8 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             .remove();
         // update set
         bars.transition().duration(300)
-            .attr("x", d => $scope.dateScaleX(new Date(d.key)))
-            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100))
+            .attr("x", d => $scope.dateScaleX(new Date(d.key))+40)
+            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
     }
@@ -191,8 +191,8 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         var bars = timeFilter.selectAll(".time-filter rect").data(timeIndex);
         bars.enter()
             .append("rect").attr("class", "bar")
-            .attr("x", d => $scope.timeScaleX(+d.key))
-            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100))
+            .attr("x", d => $scope.timeScaleX(+d.key)+40)
+            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));
         bars.exit().transition().duration(300)
@@ -201,8 +201,8 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             .remove();
         // update set
         bars.transition().duration(300)
-            .attr("x", d => $scope.timeScaleX(+d.key))
-            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100))
+            .attr("x", d => $scope.timeScaleX(+d.key)+40)
+            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));
     }
@@ -239,7 +239,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             height = +svg.style("height").replace("px", ""),
             margin = 20;
         var brushDate = d3.brushX()
-                          .extent([[0, 0], [width, height / 2 - margin]])
+                          .extent([[0, -10], [width, height / 2 - margin -10]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         var eventSelection = {};
@@ -248,7 +248,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
            .call(brushDate.move, [$scope.dateScaleX(new Date(2015, 9, 1)), $scope.dateScaleX(new Date(2016, 5, 30))]);
 
         var brushTime = d3.brushX()
-                          .extent([[0, height - (height / 2 - margin)], [width, height - margin]])
+                          .extent([[0, height - (height / 2 - margin) - 15], [width, height - margin - 15]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         svg.append("g").attr("class", "brush-time")
@@ -386,13 +386,26 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                   var svg = d3.select("#neighborhoods svg");
                   var width = +svg.style("width").replace("px", ""),
                       height = +svg.style("height").replace("px", ""),
-                      margin = 20;
+                      margin = 20,
+					  padding = 25;
                   var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
                       x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([0, x0.bandwidth()]),
                       y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
                   d3.select("#neighborhoods svg .axis").transition().duration(300)
-                          .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)));
-                  var types = svg.selectAll(".type").data(regionTypeIndex);
+                          .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
+						  .selectAll("text")	
+							.style("text-anchor", "middle")
+							.attr("dx", "-.8em")
+							.attr("dy", ".15em")
+							.attr("transform", "rotate(0)");
+							
+				  d3.select("#neighborhoods svg").append("g") //y axis
+                           .attr("class", "axis")
+						   .attr("transform", "translate("+(padding)+",0)")
+						   .call(d3.axisLeft(y).ticks(5));	
+
+						   
+				  var types = svg.selectAll(".type").data(regionTypeIndex);
                   types.exit().selectAll("rect").transition().duration(300)
                               .attr("y", y(0))
                               .attr("height", d => height - margin - y(0))
@@ -405,10 +418,10 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                        .enter()
                        .append("rect")
                           .attr("width", x1.bandwidth())
-                          .attr("x", d => x1(d.name))
+                          .attr("x", d => x1(d.name)+5)
                           .attr("y", d => y(d.value))
                           .attr("height", d => height - margin - y(d.value))
-                          .style("fill", d => d.name === 'value' ? '#4682b4' : '#ccc');
+                          .style("fill", d => d.name === 'value' ? '#4682b4' : '#7aa76d');
                   //update set
                   types.selectAll("rect").transition().duration(300)
                           .attr("y", d => y(d.value))

@@ -195,22 +195,55 @@
         var svg = d3.select(".filter-bottom svg");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
-            margin = 20;        
-        svg.append("g").attr("class", "date-filter")
-                       .append("g").attr("class", "axis")
-                            .attr("transform", "translate(0," + (height / 2 - margin) + ")");
-        svg.append("g").attr("class", "time-filter")
-                       .append("g").attr("class", "axis")
-                            .attr("transform", "translate(0," + (height - margin) + ")");        
+            margin = 35,
+			padding = 40;     
+		var y1 = d3.scaleLinear().range([height/2 - 30, 0])
+								.domain([0, 100]);
+		var y2 = d3.scaleLinear().range([height - margin, height/2])
+								.domain([0, 100]);
+								
+        var dateFilter = svg.append("g")
+							.attr("class", "date-filter");
+							
+		dateFilter.append("g").attr("class", "axis")  //x-axis
+				  .attr("transform", "translate("+(padding)+"," + (height / 2 - margin + 5) + ")");
+		
+		dateFilter.append("g").attr("class", "axis")
+				  .attr("transform", "translate("+(padding)+",0)")
+				  .call(d3.axisLeft(y1).ticks(5));
+		 			   	
+		svg.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ padding/3 +","+(height/2.5)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            .text("Frequency Percentage");
+			
+		svg.append("text")
+            .attr("text-anchor", "middle")  
+            .attr("transform", "translate("+ (width/2) +","+(height/2)+")")  
+            .text("Date");	
+			
+        var timeFilter = svg.append("g")
+							.attr("class", "time-filter");
+							
+        timeFilter.append("g").attr("class", "axis")
+                              .attr("transform", "translate("+padding+"," + (height - margin) + ")"); 
+							  
+		timeFilter.append("g").attr("class", "axis")
+				  .attr("transform", "translate("+(padding)+",0)")
+				  .call(d3.axisLeft(y2).ticks(5));	
+				  
+		svg.append("text")
+            .attr("text-anchor", "middle")  
+            .attr("transform", "translate("+ (width/2) +","+(height-(padding/6))+")")  
+            .text("Time of Day");							
     }
-
     function initSidebarChart() {
         var svg = d3.select("#neighborhoods svg");
         var width = +svg.style("width").replace("px", ""),
             height = +svg.style("height").replace("px", ""),
             margin = 20;
-        svg.append("g").attr("class", "axis")
-                       .attr("transform", "translate(0," + (height - margin) + ")");
+        svg.append("g").attr("class", "axis") //x axis
+                       .attr("transform", "translate(5," + (height - margin) + ")");
     }
 
     function shrinkBounds(bounds) {
