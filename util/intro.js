@@ -12,19 +12,19 @@
                 steps: [
                   {
                       element: $('#home').get(0),
-                      intro: 'Welcome! Please read the introduction'
+                      intro: 'Welcome, new Bostonians! Explore our new features.'
                   },
                   {
                       element: $('#map').get(0),
-                      intro: 'Number shows... Orange... Blue... Click neighborhood...'
+                      intro: 'The map shows you all neighborhoods in Boston. The number on blue circles showing 311 Non-emergency Services cases happened on this area. While yellow ones indicating crime cases.'
                   },
                   {
                       element: $('.filter-top').get(0),
-                      intro: "Use type filters to show only things that you're interested in"
+                      intro: "Type an issue you care about, and see how the status is in a particular area."
                   },
                   {
                       element: $('.filter-bottom').get(0),
-                      intro: 'Click and drag the date/time filters to focus on specific time range'
+                      intro: 'Drag the filter to see a particular time period.'
                   }
                 ]
             });
