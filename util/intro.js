@@ -12,7 +12,7 @@
                 steps: [
                   {
                       element: $('#home').get(0),
-                      intro: 'Welcome, new Bostonians! Explore your neighborhood here.'
+                      intro: 'Welcome, new Bostonians! Explore our new features.'
                   },
                   {
                       element: $('#map').get(0),
