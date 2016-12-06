@@ -387,9 +387,9 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                   var width = +svg.style("width").replace("px", ""),
                       height = +svg.style("height").replace("px", ""),
                       margin = 20,
-					  padding = 25;
+					  padding = 30;
                   var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
-                      x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([0, x0.bandwidth()]),
+                      x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([20, x0.bandwidth()]),
                       y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
                   d3.select("#neighborhoods svg .x-axis").transition().duration(300)
                           .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
