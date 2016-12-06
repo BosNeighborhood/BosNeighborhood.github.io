@@ -201,8 +201,8 @@ button {
 .legend li { float: left; margin-right: 10px; }
 .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
 /* your colors */
-.legend .selectedNeighb { background-color: #4682b4; }
-.legend .average { background-color: #7aa76d; }
+.legend .selectedNeighb { background-color: #FAA41A; }
+.legend .average { background-color: #ccc; }
 
 
 #custom-search-input {

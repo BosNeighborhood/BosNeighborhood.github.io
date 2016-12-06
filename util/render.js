@@ -419,7 +419,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                           .attr("x", d => x1(d.name) + 5)
                           .attr("y", d => y(d.value))
                           .attr("height", d => height - margin - y(d.value))
-                          .style("fill", d => d.name === 'value' ? '#4682b4' : '#7aa76d');
+                          .style("fill", d => d.name === 'value' ? '#FAA41A' : '#ccc');
                   //update set
                   types.selectAll("rect").transition().duration(300)
                           .attr("y", d => y(d.value))
