@@ -1,4 +1,4 @@
-﻿﻿/// <reference path="../third-party/lodash.js" />
+﻿/// <reference path="../third-party/lodash.js" />
 
 define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_map', 'util/markerclusterer'], function (_, util, d3, Debounce, Progress) {
     // datasetType: 'crime' or '311'
@@ -34,7 +34,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                 }, 0);
                 console.log("good records: " + num_good_record);
 
-                deleteMarkers($scope, datasetType);                
+                deleteMarkers($scope, datasetType);
                 // create new markers            
                 // todo: move to server side script to not block UI
                 //var processed_records = -1;
@@ -42,7 +42,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                     .filter(record => !isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long)))
                     .map(record => {
                         //Progress.report(++processed_records / num_good_record * 95/*leave some space for cluster rendering*/);
-                        var visible = $scope.currSelectedRegion 
+                        var visible = $scope.currSelectedRegion
                                         ? google.maps.geometry.poly.containsLocation(new google.maps.LatLng(+record.lat, +record.long), $scope.currSelectedRegion)
                                         : true;
                         var type = datasetType === 'crime' ? record.offense_code_group
@@ -61,7 +61,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                         })
                     }).value();
                 _.forEach($scope.markers[datasetType], marker => {
-                    google.maps.event.addListener(marker, 'click', function (event) {
+                    google.maps.event.addListener(marker, 'mouseover', function (event) {
                         // Within the event listener, "this" refers to the polygon which
                         // received the event.   
                         var formatTime = d3.timeFormat("%a %B %d, %Y %-I%p");
@@ -86,7 +86,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                     });
                 });
                 // update marker cluster
-                if ($scope.markerCluster) {                    
+                if ($scope.markerCluster) {
                     $scope.markerCluster.removeMarkers(_.filter($scope.markerCluster.getMarkers(), marker => marker.datasetType === datasetType));
                     $scope.markerCluster.addMarkers(_.filter($scope.markers[datasetType], marker=>marker.getVisible()));
                 }
@@ -109,7 +109,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
 
     function renderDateFilter($scope) {
         // only consider markers shown on map
-        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();        
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();
         // todo: remove bars
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
@@ -145,7 +145,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         bars.enter()
             .append("rect").attr("class", "bar")
             .attr("x", d => $scope.dateScaleX(new Date(d.key)))
-            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
+            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100) - 10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
         bars.exit().transition().duration(300)
@@ -155,14 +155,14 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         // update set
         bars.transition().duration(300)
             .attr("x", d => $scope.dateScaleX(new Date(d.key)))
-            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100)-10)
+            .attr("y", d => $scope.dateScaleY(d.value / max_val * 100) - 10)
             .attr("width", d => ($scope.dateScaleX(d3.timeMonth.offset(new Date(d.key))) - $scope.dateScaleX(new Date(d.key))) * 0.95)
             .attr("height", d => height / 2 - margin - $scope.dateScaleY(d.value / max_val * 100));
     }
 
     function renderTimeFilter($scope) {
         // only consider markers shown on map
-        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();        
+        var data = _($scope.markers).values().flatten().filter(val=>val.getVisible()).map(val=>val.record).value();
         if (data.length === 0) return;
         var svg = d3.select(".filter-bottom");
         var width = +svg.style("width").replace("px", ""),
@@ -192,7 +192,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         bars.enter()
             .append("rect").attr("class", "bar")
             .attr("x", d => $scope.timeScaleX(+d.key))
-            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
+            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100) - 15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));
         bars.exit().transition().duration(300)
@@ -202,7 +202,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
         // update set
         bars.transition().duration(300)
             .attr("x", d => $scope.timeScaleX(+d.key))
-            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100)-15)
+            .attr("y", d => $scope.timeScaleY(d.value / max_val * 100) - 15)
             .attr("width", d => ($scope.timeScaleX(+d.key + 1) - $scope.timeScaleX(+d.key)) * 0.95)
             .attr("height", d => height - margin - $scope.timeScaleY(d.value / max_val * 100));
     }
@@ -239,7 +239,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
             height = +svg.style("height").replace("px", ""),
             margin = 20;
         var brushDate = d3.brushX()
-                          .extent([[0, -10], [width, height / 2 - margin -10]])
+                          .extent([[0, -10], [width, height / 2 - margin - 10]])
                           .on("brush", onBrush)
                           .on("end", onBrushEnd);
         var eventSelection = {};
@@ -304,10 +304,10 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                     if (!$scope.currDateTimeFilterExtent['date'])
                         $scope.currDateTimeFilterExtent['date'] = [0, width - margin].map($scope.dateScaleX.invert).map(d3.timeMonth.floor);
                     updateDateFilterStyle($scope.currDateTimeFilterExtent['date']);
-                    updateTimeFilterStyle(extent);                    
+                    updateTimeFilterStyle(extent);
                 }
             });
-            }
+        }
     }
 
     function updateDateFilterStyle(extent) {
@@ -351,7 +351,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
     //      total number of records per type / total numbers of regions on map
     //      ideally all number should be normalized according to population
     function renderCrimeTypeChart($scope) {
-        return new Promise((resolve, reject) => {            
+        return new Promise((resolve, reject) => {
             d3.queue()
               // request crime data for selected region in current date/time range
               .defer(util.requestAggCrimeData, $scope.currDateTimeFilterExtent, $scope.currSelectedRegion.getBounds())
@@ -362,7 +362,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                       console.log(error);
                   }
                   var regionData = JSON.parse(regionResponse.response),
-                      allData = JSON.parse(allResponse.response);                  
+                      allData = JSON.parse(allResponse.response);
                   regionTypeIndex = _(regionData).take(5).map(d=> {
                       return {
                           key: d.offense_code_group,
@@ -387,23 +387,23 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                   var width = +svg.style("width").replace("px", ""),
                       height = +svg.style("height").replace("px", ""),
                       margin = 20,
-		      padding = 30;
+		              padding = 30;
                   var x0 = d3.scaleBand().domain(_.map(regionTypeIndex, e=>e.key)).rangeRound([margin, width - margin]).padding(0.1),
                       x1 = d3.scaleBand().domain(['value', 'avg']).rangeRound([20, x0.bandwidth()]),
                       y = d3.scaleLinear().domain([0, max_value]).range([height - margin, margin]);
                   d3.select("#neighborhoods svg .x-axis").transition().duration(300)
-                          			  .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
-						  .selectAll("text")	
+                          .call(d3.axisBottom(x0).tickFormat(type => type.trunc(10)))
+						  .selectAll("text")
 							.style("text-anchor", "middle")
 							.attr("dx", "-.8em")
 							.attr("dy", ".15em")
 							.attr("transform", "rotate(0)");
-							
-                  d3.select("#neighborhoods svg .y-axis").transition().duration(300)
-						   .call(d3.axisLeft(y).ticks(5));	
 
-						   
-		  var types = svg.selectAll(".type").data(regionTypeIndex);
+                  d3.select("#neighborhoods svg .y-axis").transition().duration(300)
+						   .call(d3.axisLeft(y).ticks(5));
+
+
+                  var types = svg.selectAll(".type").data(regionTypeIndex);
                   types.exit().selectAll("rect").transition().duration(300)
                               .attr("y", y(0))
                               .attr("height", d => height - margin - y(0))
@@ -416,7 +416,7 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                        .enter()
                        .append("rect")
                           .attr("width", x1.bandwidth())
-                          .attr("x", d => x1(d.name)+5)
+                          .attr("x", d => x1(d.name) + 5)
                           .attr("y", d => y(d.value))
                           .attr("height", d => height - margin - y(d.value))
                           .style("fill", d => d.name === 'value' ? '#4682b4' : '#7aa76d');
