@@ -67,18 +67,23 @@ function (d3, $, angular, util) {
                     new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + " Boston" }, (results, status) => {
                         // todo: do something if status is not OK
                         if (status == google.maps.GeocoderStatus.OK) {
+							console.log("GeoCoderStatus is okay!!!");
                             var school_lat = +results[0].geometry.location.lat(),
                                 school_lng = +results[0].geometry.location.lng();
-				var image = 'data/img/school.png';	
+							var image = 'data/img/school.png';	
                             $scope.school_marker = new google.maps.Marker({
                                 position: { lat: school_lat, lng: school_lng },
                                 label: $scope.school.selected,
                                 map: $scope.map,
-				icon: image
+								icon: image
                             });
 				$scope.map.setZoom(13);
 				$scope.map.panTo($scope.school_marker.position);
                         }
+						else {
+							alert("GeoCoderStatus did not work.  Please refresh the page!");
+							
+						}
                     });
                 });
             });        

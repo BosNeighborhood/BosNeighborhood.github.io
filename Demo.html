@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Demo</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -9,7 +9,22 @@
   <link href="https://fonts.googleapis.com/css?family=Hind|Lobster" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 
-  
+    <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+	body{
+		overflow-y:visible !important;}
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+    
+  </style>
 </head>
 <body>
 
@@ -20,7 +35,7 @@
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="AboutUs.html"><span class="glyphicon glyphicon-info-sign"></span> About us</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-share"></span> Share</a></li>
+                <li><a href="Demo.html"><span class="glyphicon glyphicon-share"></span> Demo</a></li>
             </ul>
         </div>
     </nav>
@@ -32,11 +47,13 @@
 </div>
 <div class="container">
   <div class="row">
+	<div class="col-md-1"></div>
     <div class="col-md-10">
 		<div class="embed-responsive embed-responsive-4by3">
-    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DBilKo38b2I"></iframe>
-</div>
+			<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DBilKo38b2I"></iframe>
+		</div>
     </div>
+	<div class="col-md-1">
   </div>
 </div>
 
