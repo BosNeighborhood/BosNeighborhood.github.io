@@ -75,15 +75,14 @@ function (d3, $, angular, util) {
                                 position: { lat: school_lat, lng: school_lng },
                                 label: $scope.school.selected,
                                 map: $scope.map,
-								icon: image
+				icon: image
                             });
 				$scope.map.setZoom(13);
 				$scope.map.panTo($scope.school_marker.position);
                         }
-						else {
-							alert("GeoCoderStatus did not work.  Please refresh the page!");
-							
-						}
+			else {
+				alert("GeoCoderStatus did not work.  Please refresh the page!");
+			      }
                     });
                 });
             });        
