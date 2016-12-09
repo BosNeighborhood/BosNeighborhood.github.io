@@ -18,7 +18,7 @@ require.config({
     shim: {
         angular: {
             exports: 'angular'
-        },        
+        },
         'chosen/angular-chosen.min': {
             deps: ['jquery', 'angular', 'chosen/chosen.jquery']
         },
@@ -28,8 +28,8 @@ require.config({
     }
 });
 
-require(['d3','jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min', 'bootstrap'],
-function (d3, $, angular, util) {    
+require(['d3', 'jquery', 'angular', 'util/module', 'avgrund/avgrund', 'google_map', 'chosen/angular-chosen.min', 'bootstrap'],
+function (d3, $, angular, util) {
     var app = angular.module("BosNeighborhood", ['localytics.directives']);
     app.controller("BosNeighborhoodController", function ($scope, $timeout) {
         $scope.school_list = [];
@@ -39,7 +39,7 @@ function (d3, $, angular, util) {
         $scope.map = null;
         $scope.prevZoomLevel = 11;
         $scope.markers = {};
-        $scope.markerCluster = null;        
+        $scope.markerCluster = null;
         $scope.infoWindow = new google.maps.InfoWindow;
         // region -> list of polygons representing the neighborhood
         $scope.region_neighborhood_ht = {};
@@ -56,38 +56,33 @@ function (d3, $, angular, util) {
         $scope.dateScaleY = null;
         $scope.timeScaleX = null;
         $scope.timeScaleY = null;
-		$scope.neighborhoodsInfo = [];
-		d3.csv("/data/NeighborhoodsInfo.csv", data => $scope.neighborhoodsInfo = data);
-		$scope.selectedNeighborhood = null;
+        $scope.neighborhoodsInfo = [];
+        d3.csv("/data/NeighborhoodsInfo.csv", data => $scope.neighborhoodsInfo = data);
+        $scope.selectedNeighborhood = null;
         $.getJSON("data/bos_university_list.json", list => $scope.school_list = list);
         $("#school-select").chosen({ placeholder_text_single: '' })
             .change(() => {
                 $timeout(() => {
                     $scope.closeModal();
-                    new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + " Boston" }, (results, status) => {
+                    new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + ", Boston, US" }, (results, status) => {
                         // todo: do something if status is not OK
                         if (status == google.maps.GeocoderStatus.OK) {
-							console.log("GeoCoderStatus is okay!!!");
                             var school_lat = +results[0].geometry.location.lat(),
                                 school_lng = +results[0].geometry.location.lng();
-							var image = 'data/img/school.png';	
+                            var image = 'data/img/school.png';
                             $scope.school_marker = new google.maps.Marker({
                                 position: { lat: school_lat, lng: school_lng },
                                 label: $scope.school.selected,
                                 map: $scope.map,
-								icon: image
+                                icon: image
                             });
-				$scope.map.setZoom(13);
-				$scope.map.panTo($scope.school_marker.position);
+                            $scope.map.setZoom(13);
+                            $scope.map.panTo($scope.school_marker.position);
                         }
-						else {
-							alert("GeoCoderStatus did not work.  Please refresh the page!");
-							
-						}
                     });
                 });
-            });        
-        Avgrund.show("#school-selector");        
+            });
+        Avgrund.show("#school-selector");
 
         $("#crime-type-filter").chosen({ placeholder_text_multiple: 'Select crime types' })
             .change(() => {
