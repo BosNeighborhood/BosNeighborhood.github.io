@@ -23,16 +23,15 @@ define(['lodash', 'util/util', 'd3', 'util/Debounce', 'util/Progress', 'google_m
                         record.occurred_on_date = record.open_dt;
                     });
                 }
-
-                // todo: comment out in production
-                console.log("received " + data.length + " records");
-                var num_good_record = _.reduce(data, (acc, record) => {
-                    if (!isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long))) {
-                        return acc + 1;
-                    }
-                    return acc;
-                }, 0);
-                console.log("good records: " + num_good_record);
+                
+                //console.log("received " + data.length + " records");
+                //var num_good_record = _.reduce(data, (acc, record) => {
+                //    if (!isNaN(parseFloat(record.lat)) && !isNaN(parseFloat(record.long))) {
+                //        return acc + 1;
+                //    }
+                //    return acc;
+                //}, 0);
+                //console.log("good records: " + num_good_record);
 
                 deleteMarkers($scope, datasetType);
                 // create new markers            

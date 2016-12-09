@@ -10,7 +10,7 @@ require.config({
     paths: {
         shapefile: '../shapefile',
         util: '../util',
-        google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ&libraries=geometry',
+        google_map: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAS0nUuUJ0wPAHEXOtKst5sJoDl-Vb5CJQ&libraries=geometry,places',
         angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min',
         jquery: 'jquery-3.1.1.min',
         bootstrap: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min'
@@ -64,9 +64,8 @@ function (d3, $, angular, util) {
             .change(() => {
                 $timeout(() => {
                     $scope.closeModal();
-                    new google.maps.Geocoder().geocode({ 'address': $scope.school.selected + ", Boston, US" }, (results, status) => {
-                        // todo: do something if status is not OK
-                        if (status == google.maps.GeocoderStatus.OK) {
+                    new google.maps.places.PlacesService($scope.map).textSearch({ query: $scope.school.selected + ", Boston, US" }, (results, status) => {
+                        if (status == google.maps.places.PlacesServiceStatus.OK) {
                             var school_lat = +results[0].geometry.location.lat(),
                                 school_lng = +results[0].geometry.location.lng();
                             var image = 'data/img/school.png';
